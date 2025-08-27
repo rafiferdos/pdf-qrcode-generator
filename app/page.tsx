@@ -718,34 +718,34 @@ export default function Home() {
                     <div className='grid grid-cols-2 items-end gap-6 mt-6'>
                       {/* Signature AN */}
                       <div className='text-center text-sm'>
-                        <div className='h-20'></div>
-                        <div style={{ borderTop: '1px solid #e5e7eb' }} />
-                        <div className='h-8 flex items-end justify-center py-1'>
+                        <div className='h-16'></div>
+                        <div className='h-20 flex items-center justify-center py-2'>
                           {signAnUrl && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={signAnUrl as string}
                               alt='sign an'
-                              className='max-h-full object-contain'
+                              className='max-h-full max-w-full object-contain'
                             />
                           )}
                         </div>
+                        <div style={{ borderTop: '1px solid #e5e7eb' }} />
                         <div style={{ color: '#374151' }}>Unterschrift AN</div>
                       </div>
                       {/* Signature AG */}
                       <div className='text-center text-sm'>
-                        <div className='h-20'></div>
-                        <div style={{ borderTop: '1px solid #e5e7eb' }} />
-                        <div className='h-8 flex items-end justify-center py-1'>
+                        <div className='h-16'></div>
+                        <div className='h-20 flex items-center justify-center py-2'>
                           {signAgUrl && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={signAgUrl as string}
                               alt='sign ag'
-                              className='max-h-full object-contain'
+                              className='max-h-full max-w-full object-contain'
                             />
                           )}
                         </div>
+                        <div style={{ borderTop: '1px solid #e5e7eb' }} />
                         <div style={{ color: '#374151' }}>Unterschrift AG</div>
                       </div>
                     </div>
