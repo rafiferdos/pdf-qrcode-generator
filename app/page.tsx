@@ -40,6 +40,7 @@ export default function Home() {
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
   const [signAnUrl, setSignAnUrl] = useState<string | null>(null)
   const [signAgUrl, setSignAgUrl] = useState<string | null>(null)
+  const [companyLogoUrl, setCompanyLogoUrl] = useState<string | null>(null)
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null)
   const [barcodeUrl, setBarcodeUrl] = useState<string | null>(null)
   const previewRef = useRef<HTMLDivElement>(null)
@@ -229,16 +230,38 @@ export default function Home() {
       pdf.rect(1.5, 1.5, W - 3, H - 3, 'DF')
     }
 
-    // Header: photo + logotype
+    // Header: photo (left) + company logo and name (right)
     const photoW = 34,
       photoH = 40
     const photoImg = await ensureSupported(photoUrl)
-    if (photoImg)
-      pdf.addImage(photoImg.url, photoImg.type, pad, pad, photoW, photoH)
-    drawText('UNITED', pad + photoW + 8, pad + 10, 16, true)
-    drawText('SECURITY', pad + photoW + 8, pad + 20, 14, true)
+    if (photoImg) pdf.addImage(photoImg.url, photoImg.type, pad, pad, photoW, photoH)
+    const headerX = pad + photoW + 8
+    const headerWidth = W - headerX - pad
+    let headerY = pad
+    const companyNameHeader = (watch('company') || '').trim()
+    const companyLogoHeader = await ensureSupported(companyLogoUrl)
+    if (companyLogoHeader) {
+      const logoWmm = Math.min(30, headerWidth)
+      const logoHmm = 12
+      const logoX = headerX + (headerWidth - logoWmm) / 2
+      pdf.addImage(companyLogoHeader.url, companyLogoHeader.type, logoX, headerY, logoWmm, logoHmm)
+      headerY += logoHmm + 2
+    }
+    if (companyNameHeader) {
+      pdf.setFont('helvetica', 'bold')
+      pdf.setFontSize(14)
+      const twCompany = pdf.getTextWidth(companyNameHeader)
+      const tx = headerX + (headerWidth - twCompany) / 2
+      pdf.text(companyNameHeader, tx, headerY + 10)
+      headerY += 12
+    }
     pdf.setTextColor(...rgb('#6b7280'))
-    drawText('M U N I C H', pad + photoW + 8, pad + 27, 7)
+    pdf.setFont('helvetica', 'normal')
+    pdf.setFontSize(7)
+    const city = 'M U N I C H'
+    const twCity = pdf.getTextWidth(city)
+    const cityX = headerX + (headerWidth - twCity) / 2
+    pdf.text(city, cityX, headerY + 6)
     pdf.setTextColor(0, 0, 0)
 
     // Name bar
@@ -411,6 +434,15 @@ export default function Home() {
                     <Input id='company' {...register('company')} />
                   </div>
                   <div className='sm:col-span-2'>
+                    <Label htmlFor='companyLogo'>Company Logo</Label>
+                    <Input
+                      id='companyLogo'
+                      type='file'
+                      accept='image/*'
+                      onChange={(e) => onImage(e, setCompanyLogoUrl)}
+                    />
+                  </div>
+                  <div className='sm:col-span-2'>
                     <Label htmlFor='address'>Address</Label>
                     <Textarea id='address' rows={2} {...register('address')} />
                   </div>
@@ -560,13 +592,18 @@ export default function Home() {
                         />
                       )}
                     </div>
-                    <div className='flex items-center justify-between'>
-                      <div className='text-right'>
-                        <div className='text-[28px] font-bold tracking-wide'>
-                          UNITED
-                        </div>
-                        <div className='text-[22px] font-semibold -mt-1'>
-                          SECURITY
+                    <div className='flex items-center justify-center'>
+                      <div className='flex flex-col items-center text-center'>
+                        {companyLogoUrl && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={companyLogoUrl}
+                            alt='company logo'
+                            className='h-12 object-contain mb-1'
+                          />
+                        )}
+                        <div className='text-xl font-semibold'>
+                          {watch('company')}
                         </div>
                         <div
                           className='text-xs tracking-[0.3em]'
