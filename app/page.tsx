@@ -274,8 +274,12 @@ export default function Home() {
     if (qrDataUrl)
       pdf.addImage(qrDataUrl, 'PNG', W - pad - 20, bandY + 2, 20, 20)
 
-    // Details block
-    let y = bandY + 28
+    // Details block - with separator line
+    let y = bandY + 32
+    // Add separator line
+    pdf.setDrawColor(...borderColor)
+    pdf.line(pad, y - 4, W - pad, y - 4)
+
     drawText('Der/Die Inhaber/in ist Mitarbeiter/in der Firma:', pad, y, 9)
     y += 6
     const addressLines = (watch('address') || '').split('\n')
@@ -609,8 +613,11 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Details section */}
-                <div className='p-4 text-[14px]'>
+                {/* Separator section with gray background */}
+                <div className='bg-gray-100 h-4'></div>
+
+                {/* Details section - separated from top section */}
+                <div className='p-4 text-[14px] border-t border-gray-200'>
                   <p className='mb-1'>
                     Der/Die Inhaber/in ist Mitarbeiter/in der Firma:
                   </p>
