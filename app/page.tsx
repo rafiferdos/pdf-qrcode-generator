@@ -280,7 +280,7 @@ export default function Home() {
     const separatorHeight = pxToMm(16) // h-4 = 16px
     pdf.setFillColor(...rgb('#f3f4f6')) // bg-gray-100
     pdf.rect(0, separatorY, W, separatorHeight, 'F')
-    
+
     // Details block - with separator line
     let y = separatorY + separatorHeight + pxToMm(16) // p-4 top padding
     // Add separator line (border-t)
