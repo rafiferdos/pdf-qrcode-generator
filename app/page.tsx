@@ -284,8 +284,8 @@ export default function Home() {
 
     // Details block
     let y = bandY + 28
-  drawText('Der/Die Inhaber/in ist Mitarbeiter/in der Firma:', pad, y, 9)
-  y += 6
+    drawText('Der/Die Inhaber/in ist Mitarbeiter/in der Firma:', pad, y, 9)
+    y += 6
     const addressLines = (watch('address') || '').split('\n')
     addressLines.forEach((line) => {
       drawText(line, pad, y, 9)
@@ -572,17 +572,11 @@ export default function Home() {
                       <div className='flex flex-col items-center text-center'>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src='/logo-united.svg'
+                          src='/logo-united.png'
                           alt='company logo'
                           className='h-12 object-contain mb-1'
                         />
-                        {/* Company name removed; logo-only header */}
-                        <div
-                          className='text-xs tracking-[0.3em]'
-                          style={{ color: '#6b7280' }}
-                        >
-                          M U N I C H
-                        </div>
+                        {/* Company name and city text removed; logo-only header */}
                       </div>
                     </div>
                   </div>
