@@ -375,27 +375,31 @@ export default function Home() {
       8
     )
 
-    // Note
+    // Note - matching preview mt-4
     const note = (watch('note') || '').trim()
+    let noteY = labelY + pxToMm(16) // mt-4
     if (note) {
       pdf.setTextColor(...rgb('#374151'))
       pdf.setFont('helvetica', 'normal')
       pdf.setFontSize(9)
       const split = pdf.splitTextToSize(note, W - 2 * pad)
-      pdf.text(split, pad, sigTop + 14)
+      pdf.text(split, pad, noteY)
       pdf.setTextColor(0, 0, 0)
+      noteY += pxToMm(split.length * 12) // Adjust for note height
     }
 
-    // Dates footer
+    // Dates footer - matching preview mt-3 and centered
+    const datesY = noteY + pxToMm(12) // mt-3
     pdf.setFontSize(9)
     const leftText = `Erstelldatum: ${watch('createdAt') || ''}`
     const rightText = `Gültig bis: ${watch('validTill') || ''}`
     const leftWidth = pdf.getTextWidth(leftText)
     const rightWidth = pdf.getTextWidth(rightText)
-    const totalWidth = leftWidth + rightWidth + 10 // 10mm gap between dates
+    const gapWidth = pxToMm(16) // gap-4
+    const totalWidth = leftWidth + rightWidth + gapWidth
     const startX = (W - totalWidth) / 2
-    drawText(leftText, startX, H - 6, 9)
-    drawText(rightText, startX + leftWidth + 10, H - 6, 9)
+    drawText(leftText, startX, datesY, 9)
+    drawText(rightText, startX + leftWidth + gapWidth, datesY, 9)
 
     pdf.save(`id-card-${watch('idNumber') || 'preview'}.pdf`)
   }
