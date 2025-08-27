@@ -523,9 +523,9 @@ export default function Home() {
             <CardContent>
               <div
                 ref={previewRef}
-                className='w-[680px] max-w-full rounded-xl overflow-hidden border mx-auto'
+                className='w-[680px] max-w-full rounded-xl overflow-hidden border mx-auto p-3 bg-gray-400'
                 style={{
-                  backgroundColor: '#ffffff',
+                  backgroundColor: '#f3f4f6',
                   color: '#000000',
                   borderColor: '#e5e7eb',
                   // Override Tailwind CSS vars with safe sRGB colors so html2canvas doesn't parse oklch/lab
@@ -549,169 +549,177 @@ export default function Home() {
                   ['--ring' as string]: '#1e40af',
                 }}
               >
-                {/* Header with photo and pseudo logo */}
-                <div className='p-4'>
-                  <div className='grid grid-cols-[120px_1fr] gap-4 items-center'>
-                    <div
-                      className='h-[140px] w-[120px] overflow-hidden rounded-md border'
-                      style={{
-                        backgroundColor: '#e5e7eb',
-                        borderColor: '#e5e7eb',
-                      }}
-                    >
-                      {photoUrl && (
+                <div className='bg-white rounded-lg overflow-hidden'>
+                  {/* Header with photo and pseudo logo */}
+                  <div className='p-4'>
+                    <div className='grid grid-cols-[120px_1fr] gap-4 items-center'>
+                      <div
+                        className='h-[140px] w-[120px] overflow-hidden rounded-md border'
+                        style={{
+                          backgroundColor: '#e5e7eb',
+                          borderColor: '#e5e7eb',
+                        }}
+                      >
+                        {photoUrl && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            alt='photo'
+                            src={photoUrl as string}
+                            className='h-full w-full object-cover'
+                          />
+                        )}
+                      </div>
+                      <div className='flex items-center justify-center'>
+                        <div className='flex flex-col items-center text-center'>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src='/logo-united.png'
+                            alt='company logo'
+                            className='h-38 object-contain mb-1'
+                          />
+                          {/* Company name and city text removed; logo-only header */}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Name bar */}
+                  <div
+                    className='px-4 py-2 text-2xl font-semibold'
+                    style={{ backgroundColor: '#1e40af', color: '#ffffff' }}
+                  >
+                    {fullName}
+                  </div>
+
+                  {/* Quick info band */}
+                  <div
+                    className='px-4 py-4 grid grid-cols-[1fr_auto] gap-4 items-center'
+                    style={{ backgroundColor: '#bfdbfe' }}
+                  >
+                    <div className='grid gap-1 text-[15px]'>
+                      <div className='flex items-center gap-2'>
+                        <span style={{ color: '#374151' }}>
+                          Personalnummer:
+                        </span>
+                        <strong>{watch('personalNumber')}</strong>
+                      </div>
+                      <div className='flex items-center gap-2'>
+                        <span style={{ color: '#374151' }}>Ausweisnummer:</span>
+                        <strong>{watch('idNumber')}</strong>
+                      </div>
+                    </div>
+                    <div className='flex flex-col items-center gap-2'>
+                      {qrDataUrl && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          alt='photo'
-                          src={photoUrl as string}
-                          className='h-full w-full object-cover'
-                        />
-                      )}
-                    </div>
-                    <div className='flex items-center justify-center'>
-                      <div className='flex flex-col items-center text-center'>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src='/logo-united.png'
-                          alt='company logo'
-                          className='h-38 object-contain mb-1'
-                        />
-                        {/* Company name and city text removed; logo-only header */}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Name bar */}
-                <div
-                  className='px-4 py-2 text-2xl font-semibold'
-                  style={{ backgroundColor: '#1e40af', color: '#ffffff' }}
-                >
-                  {fullName}
-                </div>
-
-                {/* Quick info band */}
-                <div
-                  className='px-4 py-4 grid grid-cols-[1fr_auto] gap-4 items-center'
-                  style={{ backgroundColor: '#bfdbfe' }}
-                >
-                  <div className='grid gap-1 text-[15px]'>
-                    <div className='flex items-center gap-2'>
-                      <span style={{ color: '#374151' }}>Personalnummer:</span>
-                      <strong>{watch('personalNumber')}</strong>
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      <span style={{ color: '#374151' }}>Ausweisnummer:</span>
-                      <strong>{watch('idNumber')}</strong>
-                    </div>
-                  </div>
-                  <div className='flex flex-col items-center gap-2'>
-                    {qrDataUrl && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={qrDataUrl} alt='qr' className='h-20 w-20' />
-                    )}
-                  </div>
-                </div>
-
-                {/* Separator section with gray background */}
-                <div className='bg-gray-100 h-4'></div>
-
-                {/* Details section - separated from top section */}
-                <div className='p-4 text-[14px] border-t border-gray-200'>
-                  <p className='mb-1'>
-                    Der/Die Inhaber/in ist Mitarbeiter/in der Firma:
-                  </p>
-                  {/* Company name removed from details */}
-                  <div className='grid grid-cols-[1fr_auto] gap-4'>
-                    <div className='whitespace-pre-line'>
-                      {watch('address')}
-                    </div>
-                    <div>
-                      <div>Tel: {watch('phone')}</div>
-                      {watch('fax') && <div>Fax: {watch('fax')}</div>}
-                    </div>
-                  </div>
-
-                  <div className='grid grid-cols-2 gap-x-6 mt-3'>
-                    <div className='space-y-1'>
-                      <div className='flex gap-2'>
-                        <span className='whitespace-nowrap'>
-                          Bewacherregisternummer AG:
-                        </span>
-                        <span className='font-semibold'>
-                          {watch('agNumber')}
-                        </span>
-                      </div>
-                      <div className='flex gap-2'>
-                        <span className='whitespace-nowrap'>
-                          Bewacherregisternummer Ma:
-                        </span>
-                        <span className='font-semibold'>
-                          {watch('maNumber')}
-                        </span>
-                      </div>
-                      <div className='flex gap-2'>
-                        <span className='whitespace-nowrap'>Barcode:</span>
-                        <span className='font-semibold'>
-                          {watch('barcode')}
-                        </span>
-                      </div>
-                    </div>
-                    <div className='flex items-end justify-end'>
-                      {barcodeUrl && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={barcodeUrl} alt='barcode' className='h-10' />
+                        <img src={qrDataUrl} alt='qr' className='h-20 w-20' />
                       )}
                     </div>
                   </div>
 
-                  <div className='grid grid-cols-2 items-end gap-6 mt-6'>
-                    {/* Signature AN */}
-                    <div className='text-center text-sm'>
-                      <div className='h-20'></div>
-                      <div style={{ borderTop: '1px solid #e5e7eb' }} />
-                      <div className='h-8 flex items-end justify-center py-1'>
-                        {signAnUrl && (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={signAnUrl as string}
-                            alt='sign an'
-                            className='max-h-full object-contain'
-                          />
-                        )}
-                      </div>
-                      <div style={{ color: '#374151' }}>Unterschrift AN</div>
-                    </div>
-                    {/* Signature AG */}
-                    <div className='text-center text-sm'>
-                      <div className='h-20'></div>
-                      <div style={{ borderTop: '1px solid #e5e7eb' }} />
-                      <div className='h-8 flex items-end justify-center py-1'>
-                        {signAgUrl && (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={signAgUrl as string}
-                            alt='sign ag'
-                            className='max-h-full object-contain'
-                          />
-                        )}
-                      </div>
-                      <div style={{ color: '#374151' }}>Unterschrift AG</div>
-                    </div>
-                  </div>
+                  {/* Separator section with gray background */}
+                  <div className='bg-gray-100 h-4'></div>
 
-                  {watch('note') && (
-                    <p
-                      className='text-[13px] mt-4'
-                      style={{ color: '#374151' }}
-                    >
-                      {watch('note')}
+                  {/* Details section - separated from top section */}
+                  <div className='p-4 text-[14px] border-t border-gray-200'>
+                    <p className='mb-1'>
+                      Der/Die Inhaber/in ist Mitarbeiter/in der Firma:
                     </p>
-                  )}
+                    {/* Company name removed from details */}
+                    <div className='grid grid-cols-[1fr_auto] gap-4'>
+                      <div className='whitespace-pre-line'>
+                        {watch('address')}
+                      </div>
+                      <div>
+                        <div>Tel: {watch('phone')}</div>
+                        {watch('fax') && <div>Fax: {watch('fax')}</div>}
+                      </div>
+                    </div>
 
-                  <div className='flex items-center justify-center gap-4 text-[13px] mt-3'>
-                    <div>Erstelldatum: {watch('createdAt')}</div>
-                    <div>Gültig bis: {watch('validTill')}</div>
+                    <div className='grid grid-cols-2 gap-x-6 mt-3'>
+                      <div className='space-y-1'>
+                        <div className='flex gap-2'>
+                          <span className='whitespace-nowrap'>
+                            Bewacherregisternummer AG:
+                          </span>
+                          <span className='font-semibold'>
+                            {watch('agNumber')}
+                          </span>
+                        </div>
+                        <div className='flex gap-2'>
+                          <span className='whitespace-nowrap'>
+                            Bewacherregisternummer Ma:
+                          </span>
+                          <span className='font-semibold'>
+                            {watch('maNumber')}
+                          </span>
+                        </div>
+                        <div className='flex gap-2'>
+                          <span className='whitespace-nowrap'>Barcode:</span>
+                          <span className='font-semibold'>
+                            {watch('barcode')}
+                          </span>
+                        </div>
+                      </div>
+                      <div className='flex items-end justify-end'>
+                        {barcodeUrl && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={barcodeUrl}
+                            alt='barcode'
+                            className='h-10'
+                          />
+                        )}
+                      </div>
+                    </div>
+
+                    <div className='grid grid-cols-2 items-end gap-6 mt-6'>
+                      {/* Signature AN */}
+                      <div className='text-center text-sm'>
+                        <div className='h-20'></div>
+                        <div style={{ borderTop: '1px solid #e5e7eb' }} />
+                        <div className='h-8 flex items-end justify-center py-1'>
+                          {signAnUrl && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={signAnUrl as string}
+                              alt='sign an'
+                              className='max-h-full object-contain'
+                            />
+                          )}
+                        </div>
+                        <div style={{ color: '#374151' }}>Unterschrift AN</div>
+                      </div>
+                      {/* Signature AG */}
+                      <div className='text-center text-sm'>
+                        <div className='h-20'></div>
+                        <div style={{ borderTop: '1px solid #e5e7eb' }} />
+                        <div className='h-8 flex items-end justify-center py-1'>
+                          {signAgUrl && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={signAgUrl as string}
+                              alt='sign ag'
+                              className='max-h-full object-contain'
+                            />
+                          )}
+                        </div>
+                        <div style={{ color: '#374151' }}>Unterschrift AG</div>
+                      </div>
+                    </div>
+
+                    {watch('note') && (
+                      <p
+                        className='text-[13px] mt-4'
+                        style={{ color: '#374151' }}
+                      >
+                        {watch('note')}
+                      </p>
+                    )}
+
+                    <div className='flex items-center justify-center gap-4 text-[13px] mt-3'>
+                      <div>Erstelldatum: {watch('createdAt')}</div>
+                      <div>Gültig bis: {watch('validTill')}</div>
+                    </div>
                   </div>
                 </div>
               </div>
