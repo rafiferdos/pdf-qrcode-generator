@@ -304,7 +304,7 @@ export default function Home() {
     if (barcodeUrl) pdf.addImage(barcodeUrl, 'PNG', W - pad - 40, y - 8, 40, 10)
 
     // Signatures
-    const sigTop = H - 30  // Moved closer to signature area
+    const sigTop = H - 18  // Further reduced bottom gap
     pdf.setDrawColor(...borderColor)
     pdf.line(pad, sigTop, W / 2 - pad, sigTop)
     pdf.line(W / 2 + pad, sigTop, W - pad, sigTop)
@@ -315,18 +315,18 @@ export default function Home() {
         signAnImg.url,
         signAnImg.type,
         pad,
-        sigTop - 12,  // Reduced space between line and signature
+        sigTop - 6,  // Much smaller space between line and signature
         W / 2 - 2 * pad,
-        12
+        6
       )
     if (signAgImg)
       pdf.addImage(
         signAgImg.url,
         signAgImg.type,
         W / 2 + pad,
-        sigTop - 12,  // Reduced space between line and signature
+        sigTop - 6,  // Much smaller space between line and signature
         W / 2 - 2 * pad,
-        12
+        6
       )
     drawText('Unterschrift AN', pad + (W / 2 - 2 * pad) / 2 - 16, sigTop + 6, 8)
     drawText(
@@ -670,7 +670,7 @@ export default function Home() {
                     <div className='text-center text-sm'>
                       <div className='h-20'></div>
                       <div style={{ borderTop: '1px solid #e5e7eb' }} />
-                      <div className='h-16 flex items-end justify-center py-2'>
+                      <div className='h-8 flex items-end justify-center py-1'>
                         {signAnUrl && (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
@@ -686,7 +686,7 @@ export default function Home() {
                     <div className='text-center text-sm'>
                       <div className='h-20'></div>
                       <div style={{ borderTop: '1px solid #e5e7eb' }} />
-                      <div className='h-16 flex items-end justify-center py-2'>
+                      <div className='h-8 flex items-end justify-center py-1'>
                         {signAgUrl && (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
