@@ -347,6 +347,9 @@ export default function Home() {
         barcodeWidth,
         barcodeHeight
       )
+    
+    // Add extra spacing to prevent overlapping
+    y += pxToMm(40) // Additional spacing after barcode section
 
     // Signatures - matching preview layout exactly
     y += pxToMm(8) // mt-2 (reduced from mt-6 by 60%)
