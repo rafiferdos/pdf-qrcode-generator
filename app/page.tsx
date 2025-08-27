@@ -248,14 +248,21 @@ export default function Home() {
                   </Button>
                 </div>
               </form>
-            </CardContent>
-          </Card>
-
+            <CardContent>
+              {/* ID card-like preview */}
+              <div
+                ref={previewRef}
+                className="w-[680px] max-w-full rounded-xl overflow-hidden border mx-auto"
+                style={{ backgroundColor: "#ffffff", color: "#000000", borderColor: "#e5e7eb" }}
+              >
           <Card className='backdrop-blur-xl bg-white/70 border-border/40 shadow-xl'>
             <CardHeader>
-              <CardTitle>Preview</CardTitle>
+                <div className="p-4">
             </CardHeader>
-            <CardContent>
+                    <div
+                      className="h-[140px] w-[120px] overflow-hidden rounded-md border"
+                      style={{ backgroundColor: "#e5e7eb", borderColor: "#e5e7eb" }}
+                    >
               {/* ID card-like preview */}
               <div
                 ref={previewRef}
@@ -265,18 +272,18 @@ export default function Home() {
                 <div className='p-4'>
                   <div className='grid grid-cols-[120px_1fr] gap-4 items-center'>
                     <div className='h-[140px] w-[120px] bg-neutral-200 overflow-hidden rounded-md border'>
-                      {photoUrl && (
+                        <div className="text-xs tracking-[0.3em]" style={{ color: "#6b7280" }}>M U N I C H</div>
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
                           alt='photo'
                           src={photoUrl}
-                          className='h-full w-full object-cover'
+                <div className="px-4 py-2 text-2xl font-semibold" style={{ backgroundColor: "#1e40af", color: "#ffffff" }}>
                         />
                       )}
-                    </div>
+                <div className="px-4 py-4 grid grid-cols-[1fr_auto] gap-4 items-center" style={{ backgroundColor: "#eff6ff" }}>
                     <div className='flex items-center justify-between'>
-                      <div className='text-right'>
-                        <div className='text-[28px] font-bold tracking-wide'>
+                    <div className="flex items-center gap-2"><span style={{ color: "#374151" }}>Personalnummer:</span><strong>{watch("personalNumber")}</strong></div>
+                    <div className="flex items-center gap-2"><span style={{ color: "#374151" }}>Ausweisnummer:</span><strong>{watch("idNumber")}</strong></div>
                           UNITED
                         </div>
                         <div className='text-[22px] font-semibold -mt-1'>
@@ -314,14 +321,14 @@ export default function Home() {
                 <div className='p-4 text-[14px]'>
                   <p className='mb-1'>
                     Der/Die Inhaber/in ist Mitarbeiter/in der Firma:
-                  </p>
-                  <div className='font-semibold'>{watch('company')}</div>
+                  <div className="grid grid-cols-2 items-end gap-6 mt-6">
+                    <div className="pt-2 text-center text-sm" style={{ borderTop: "1px solid #e5e7eb" }}>Unterschrift AN
                   <div className='grid grid-cols-[1fr_auto] gap-4'>
                     <div className='whitespace-pre-line'>
                       {watch('address')}
                     </div>
                     <div>
-                      <div>Tel: {watch('phone')}</div>
+                    <div className="pt-2 text-center text-sm" style={{ borderTop: "1px solid #e5e7eb" }}>Unterschrift AG
                       {watch('fax') && <div>Fax: {watch('fax')}</div>}
                     </div>
                   </div>
@@ -329,9 +336,9 @@ export default function Home() {
                   <div className='grid grid-cols-2 gap-x-6 mt-3'>
                     <div className='grid grid-cols-[auto_1fr] gap-x-2'>
                       <div>Bewacherregisternummer AG:</div>
-                      <div className='font-semibold'>{watch('agNumber')}</div>
-                      <div>Bewacherregisternummer Ma:</div>
-                      <div className='font-semibold'>{watch('maNumber')}</div>
+                  {watch("note") && (
+                    <p className="text-[13px] mt-4" style={{ color: "#374151" }}>{watch("note")}</p>
+                  )}
                       <div>Barcode:</div>
                       <div className='font-semibold'>{watch('barcode')}</div>
                     </div>
@@ -374,7 +381,7 @@ export default function Home() {
                     </p>
                   )}
 
-                  <div className='flex items-center justify-between text-[13px] mt-3'>
+                  <div className="flex items-center justify-between text-[13px] mt-3">
                     <div>Erstelldatum: {watch('createdAt')}</div>
                     <div>Gültig bis: {watch('validTill')}</div>
                   </div>
