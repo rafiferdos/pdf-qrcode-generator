@@ -589,7 +589,7 @@ export default function Home() {
                 {/* Quick info band */}
                 <div
                   className='px-4 py-4 grid grid-cols-[1fr_auto] gap-4 items-center'
-                  style={{ backgroundColor: '#eff6ff' }}
+                  style={{ backgroundColor: '#bfdbfe' }}
                 >
                   <div className='grid gap-1 text-[15px]'>
                     <div className='flex items-center gap-2'>
