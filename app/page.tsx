@@ -237,7 +237,6 @@ export default function Home() {
     const headerX = pad + photoW + 8
     const headerWidth = W - headerX - pad
     let headerY = pad
-    const companyNameHeader = (watch('company') || '').trim()
     try {
       const logoPng = await rasterizeToPng('/logo-united.svg')
       const logoWmm = Math.min(30, headerWidth)
@@ -246,14 +245,7 @@ export default function Home() {
       pdf.addImage(logoPng, 'PNG', logoX, headerY, logoWmm, logoHmm)
       headerY += logoHmm + 2
     } catch {}
-    if (companyNameHeader) {
-      pdf.setFont('helvetica', 'bold')
-      pdf.setFontSize(14)
-      const twCompany = pdf.getTextWidth(companyNameHeader)
-      const tx = headerX + (headerWidth - twCompany) / 2
-      pdf.text(companyNameHeader, tx, headerY + 10)
-      headerY += 12
-    }
+    // company name removed from header
     pdf.setTextColor(...rgb('#6b7280'))
     pdf.setFont('helvetica', 'normal')
     pdf.setFontSize(7)
@@ -292,10 +284,8 @@ export default function Home() {
 
     // Details block
     let y = bandY + 28
-    drawText('Der/Die Inhaber/in ist Mitarbeiter/in der Firma:', pad, y, 9)
-    y += 6
-    drawText(watch('company') || '', pad, y, 10, true)
-    y += 5
+  drawText('Der/Die Inhaber/in ist Mitarbeiter/in der Firma:', pad, y, 9)
+  y += 6
     const addressLines = (watch('address') || '').split('\n')
     addressLines.forEach((line) => {
       drawText(line, pad, y, 9)
