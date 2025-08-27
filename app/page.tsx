@@ -172,8 +172,11 @@ export default function Home() {
       }
     }
     const pxToMm = (px: number) => (px * 25.4) / 96
-    const wPx = previewRef.current?.clientWidth || 680
-    const hPx = previewRef.current?.clientHeight || 940
+    // Get the inner white card dimensions (excluding p-3 padding)
+    const outerContainer = previewRef.current
+    const innerCard = outerContainer?.querySelector('.bg-white') as HTMLElement
+    const wPx = innerCard?.clientWidth || 680 - 24 // 680px - 12px padding on each side
+    const hPx = innerCard?.clientHeight || 940 - 24 // estimated height - padding
     const W = pxToMm(wPx)
     const H = pxToMm(hPx)
     const pdf = new jsPDF({
