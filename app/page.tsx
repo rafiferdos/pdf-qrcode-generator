@@ -303,17 +303,23 @@ export default function Home() {
       drawText(`Fax: ${watch('fax')}`, rightColX, rightY, 9)
     }
 
-    // Registry and barcode
-    y += 2
+    // Registry and barcode - matching preview spacing
+    y += pxToMm(12) // mt-3
+    const registryStartY = y
     drawText('Bewacherregisternummer AG:', pad, y, 9)
-    drawText(watch('agNumber') || '', pad + 52, y, 9, true)
-    y += 6
+    drawText(watch('agNumber') || '', pad + pxToMm(160), y, 9, true)
+    y += pxToMm(24) // space-y-1
     drawText('Bewacherregisternummer Ma:', pad, y, 9)
-    drawText(watch('maNumber') || '', pad + 52, y, 9, true)
-    y += 6
+    drawText(watch('maNumber') || '', pad + pxToMm(160), y, 9, true)
+    y += pxToMm(24) // space-y-1
     drawText('Barcode:', pad, y, 9)
-    drawText(watch('barcode') || '', pad + 25, y, 9, true)
-    if (barcodeUrl) pdf.addImage(barcodeUrl, 'PNG', W - pad - 40, y - 8, 40, 10)
+    drawText(watch('barcode') || '', pad + pxToMm(60), y, 9, true)
+    
+    // Barcode image on the right
+    const barcodeWidth = pxToMm(160) // Estimated barcode width
+    const barcodeHeight = pxToMm(40) // h-10 = 40px
+    if (barcodeUrl) 
+      pdf.addImage(barcodeUrl, 'PNG', W - pad - barcodeWidth, registryStartY + pxToMm(32), barcodeWidth, barcodeHeight)
 
     // Signatures
     const sigTop = H - 18 // Further reduced bottom gap
