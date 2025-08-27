@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -62,8 +62,52 @@ export default function Home() {
       note: 'Sollten Sie diesen Ausweis finden, so bitten wir Sie ihn uns unfrei an obige Adresse zu senden.',
     },
   })
-
+  
+  // Derived values from the form
   const firstName = watch('firstName')
+  const lastName = watch('lastName')
+  const idNumberVal = watch('idNumber')
+  const barcodeVal = watch('barcode')
+  const fullName = `${(lastName || '').trim()}, ${(firstName || '').trim()}`
+
+  // Image upload helper
+  const onImage = (e: React.ChangeEvent<HTMLInputElement>, setter: (url: string | null) => void) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => setter(reader.result as string)
+    reader.readAsDataURL(file)
+  }
+
+  // Generate QR when id number changes
+  useEffect(() => {
+    if (!idNumberVal) { setQrDataUrl(null); return }
+    QRCode.toDataURL(idNumberVal, { width: 200, margin: 0, errorCorrectionLevel: 'M' })
+      .then((url) => setQrDataUrl(url))
+      .catch(() => setQrDataUrl(null))
+  }, [idNumberVal])
+
+  // Generate barcode when barcode value changes
+  useEffect(() => {
+    if (!barcodeVal) { setBarcodeUrl(null); return }
+    try {
+      const canvas = document.createElement('canvas')
+      const format: 'EAN13' | 'CODE128' = barcodeVal.length === 13 ? 'EAN13' : 'CODE128'
+      JsBarcode(canvas, barcodeVal, {
+        format,
+        displayValue: false,
+        margin: 0,
+        height: 40,
+        background: '#ffffff',
+      })
+      setBarcodeUrl(canvas.toDataURL('image/png'))
+    } catch {
+      setBarcodeUrl(null)
+    }
+  }, [barcodeVal])
+
+  // No-op submit to keep the Update Preview button semantic; watch() already updates live
+  const onSubmit = () => {}
   const downloadPdf = async () => {
     // Programmatic jsPDF drawing (no html2canvas) to avoid color parsing errors
     const pxToMm = (px: number) => (px * 25.4) / 96
@@ -90,7 +134,12 @@ export default function Home() {
     const borderColor = rgb('#e5e7eb')
     pdf.setDrawColor(...borderColor)
     pdf.setFillColor(255, 255, 255)
-    ;(pdf as any).roundedRect?.(1.5, 1.5, W - 3, H - 3, 3, 3, 'DF') || pdf.rect(1.5, 1.5, W - 3, H - 3, 'DF')
+    const anyPdf = pdf as unknown as { roundedRect?: (x: number, y: number, w: number, h: number, rx: number, ry?: number, style?: string) => void }
+    if (typeof anyPdf.roundedRect === 'function') {
+      anyPdf.roundedRect(1.5, 1.5, W - 3, H - 3, 3, 3, 'DF')
+    } else {
+      pdf.rect(1.5, 1.5, W - 3, H - 3, 'DF')
+    }
 
     // Header: photo + logotype
     const photoW = 34, photoH = 40
@@ -172,6 +221,11 @@ export default function Home() {
 
     pdf.save(`id-card-${watch('idNumber') || 'preview'}.pdf`)
   }
+
+  return (
+    <div
+      className='min-h-dvh'
+      style={{
         background:
           'radial-gradient(80% 60% at 50% -20%, #fafafa 0%, rgba(250,250,250,0) 60%), linear-gradient(180deg, #ffffff, #f3f4f6)',
       }}
