@@ -147,20 +147,36 @@ export default function Home() {
               <CardTitle>Details</CardTitle>
             </CardHeader>
             <CardContent>
-              <form className='grid grid-cols-1 gap-6' onSubmit={handleSubmit(onSubmit)}>
-                <div className='text-xs uppercase tracking-wide text-muted-foreground'>Person</div>
+              <form
+                className='grid grid-cols-1 gap-6'
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <div className='text-xs uppercase tracking-wide text-muted-foreground'>
+                  Person
+                </div>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                   <div>
                     <Label htmlFor='firstName'>First name</Label>
-                    <Input id='firstName' placeholder='Jawid' {...register('firstName')} />
+                    <Input
+                      id='firstName'
+                      placeholder='Jawid'
+                      {...register('firstName')}
+                    />
                   </div>
                   <div>
                     <Label htmlFor='lastName'>Last name</Label>
-                    <Input id='lastName' placeholder='Zadran' {...register('lastName')} />
+                    <Input
+                      id='lastName'
+                      placeholder='Zadran'
+                      {...register('lastName')}
+                    />
                   </div>
                   <div>
                     <Label htmlFor='personalNumber'>Personalnummer</Label>
-                    <Input id='personalNumber' {...register('personalNumber')} />
+                    <Input
+                      id='personalNumber'
+                      {...register('personalNumber')}
+                    />
                   </div>
                   <div>
                     <Label htmlFor='idNumber'>Ausweisnummer</Label>
@@ -168,7 +184,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className='text-xs uppercase tracking-wide text-muted-foreground'>Company</div>
+                <div className='text-xs uppercase tracking-wide text-muted-foreground'>
+                  Company
+                </div>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                   <div className='sm:col-span-2'>
                     <Label htmlFor='company'>Company</Label>
@@ -188,7 +206,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className='text-xs uppercase tracking-wide text-muted-foreground'>Registry</div>
+                <div className='text-xs uppercase tracking-wide text-muted-foreground'>
+                  Registry
+                </div>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                   <div>
                     <Label htmlFor='agNumber'>Bewacherregisternummer AG</Label>
@@ -204,15 +224,25 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className='text-xs uppercase tracking-wide text-muted-foreground'>Validity</div>
+                <div className='text-xs uppercase tracking-wide text-muted-foreground'>
+                  Validity
+                </div>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                   <div>
                     <Label htmlFor='createdAt'>Erstelldatum</Label>
-                    <Input id='createdAt' placeholder='06.06.2025' {...register('createdAt')} />
+                    <Input
+                      id='createdAt'
+                      placeholder='06.06.2025'
+                      {...register('createdAt')}
+                    />
                   </div>
                   <div>
                     <Label htmlFor='validTill'>Gültig bis</Label>
-                    <Input id='validTill' placeholder='06.06.2027' {...register('validTill')} />
+                    <Input
+                      id='validTill'
+                      placeholder='06.06.2027'
+                      {...register('validTill')}
+                    />
                   </div>
                   <div className='sm:col-span-2'>
                     <Label htmlFor='note'>Note</Label>
@@ -220,25 +250,41 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className='text-xs uppercase tracking-wide text-muted-foreground'>Uploads</div>
+                <div className='text-xs uppercase tracking-wide text-muted-foreground'>
+                  Uploads
+                </div>
                 <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
                   <div>
                     <Label>Upload Photo</Label>
-                    <Input type='file' accept='image/*' onChange={(e) => onImage(e, setPhotoUrl)} />
+                    <Input
+                      type='file'
+                      accept='image/*'
+                      onChange={(e) => onImage(e, setPhotoUrl)}
+                    />
                   </div>
                   <div>
                     <Label>Signature AN</Label>
-                    <Input type='file' accept='image/*' onChange={(e) => onImage(e, setSignAnUrl)} />
+                    <Input
+                      type='file'
+                      accept='image/*'
+                      onChange={(e) => onImage(e, setSignAnUrl)}
+                    />
                   </div>
                   <div>
                     <Label>Signature AG</Label>
-                    <Input type='file' accept='image/*' onChange={(e) => onImage(e, setSignAgUrl)} />
+                    <Input
+                      type='file'
+                      accept='image/*'
+                      onChange={(e) => onImage(e, setSignAgUrl)}
+                    />
                   </div>
                 </div>
 
                 <div className='flex gap-3 mt-2'>
                   <Button type='submit'>Update Preview</Button>
-                  <Button type='button' variant='outline' onClick={downloadPdf}>Download PDF</Button>
+                  <Button type='button' variant='outline' onClick={downloadPdf}>
+                    Download PDF
+                  </Button>
                 </div>
               </form>
             </CardContent>
@@ -367,7 +413,11 @@ export default function Home() {
                       <div className='h-20 flex items-end justify-center py-2'>
                         {signAnUrl && (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={signAnUrl as string} alt='sign an' className='max-h-full object-contain' />
+                          <img
+                            src={signAnUrl as string}
+                            alt='sign an'
+                            className='max-h-full object-contain'
+                          />
                         )}
                       </div>
                       <div style={{ color: '#374151' }}>Unterschrift AN</div>
@@ -378,7 +428,11 @@ export default function Home() {
                       <div className='h-20 flex items-end justify-center py-2'>
                         {signAgUrl && (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={signAgUrl as string} alt='sign ag' className='max-h-full object-contain' />
+                          <img
+                            src={signAgUrl as string}
+                            alt='sign ag'
+                            className='max-h-full object-contain'
+                          />
                         )}
                       </div>
                       <div style={{ color: '#374151' }}>Unterschrift AG</div>
