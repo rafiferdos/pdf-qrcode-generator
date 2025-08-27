@@ -239,7 +239,7 @@ export default function Home() {
     const headerX = pad + photoW + 8
     const headerWidth = W - headerX - pad
     let headerY = pad
-  const companyNameHeader = (watch('company') || '').trim()
+    const companyNameHeader = (watch('company') || '').trim()
     try {
       const logoPng = await rasterizeToPng('/logo-united.svg')
       const logoWmm = Math.min(30, headerWidth)
