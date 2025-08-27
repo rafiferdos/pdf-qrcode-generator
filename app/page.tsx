@@ -254,15 +254,19 @@ export default function Home() {
     pdf.setTextColor(0, 0, 0)
 
     // Info band with QR
-    const bandY = nameBarY + 9
-    pdf.setFillColor(...rgb('#eff6ff'))
-    pdf.rect(1.5, bandY, W - 3, 22, 'F')
-    drawText('Personalnummer:', pad, bandY + 8, 9)
-    drawText(watch('personalNumber') || '', pad + 30, bandY + 8, 9, true)
-    drawText('Ausweisnummer:', pad, bandY + 16, 9)
-    drawText(watch('idNumber') || '', pad + 30, bandY + 16, 9, true)
+    const bandY = nameBarY + nameBarHeight
+    const bandHeight = pxToMm(80) // py-4 = 32px + content ≈ 80px total
+    pdf.setFillColor(...rgb('#bfdbfe')) // Matching the preview color
+    pdf.rect(0, bandY, W, bandHeight, 'F')
+    const textY1 = bandY + pxToMm(20)
+    const textY2 = bandY + pxToMm(40)
+    drawText('Personalnummer:', pad, textY1, 9)
+    drawText(watch('personalNumber') || '', pad + pxToMm(100), textY1, 9, true)
+    drawText('Ausweisnummer:', pad, textY2, 9)
+    drawText(watch('idNumber') || '', pad + pxToMm(100), textY2, 9, true)
+    const qrSize = pxToMm(80) // h-20 w-20 = 80px
     if (qrDataUrl)
-      pdf.addImage(qrDataUrl, 'PNG', W - pad - 20, bandY + 2, 20, 20)
+      pdf.addImage(qrDataUrl, 'PNG', W - pad - qrSize, bandY + pxToMm(8), qrSize, qrSize)
 
     // Details block - with separator line
     let y = bandY + 32
