@@ -239,8 +239,8 @@ export default function Home() {
     let headerY = pad
     try {
       const logoPng = await rasterizeToPng('/logo-united.png')
-      const logoWmm = Math.min(70, headerWidth)
-      const logoHmm = 28
+      const logoWmm = Math.min(119, headerWidth)
+      const logoHmm = 48
       const logoX = headerX + (headerWidth - logoWmm) / 2
       pdf.addImage(logoPng, 'PNG', logoX, headerY, logoWmm, logoHmm)
       headerY += logoHmm + 2
@@ -566,7 +566,7 @@ export default function Home() {
                         <img
                           src='/logo-united.png'
                           alt='company logo'
-                          className='h-28 object-contain mb-1'
+                          className='h-38 object-contain mb-1'
                         />
                         {/* Company name and city text removed; logo-only header */}
                       </div>
@@ -622,13 +622,19 @@ export default function Home() {
                   </div>
 
                   <div className='grid grid-cols-2 gap-x-6 mt-3'>
-                    <div className='grid grid-cols-[auto_1fr] gap-x-2'>
-                      <div>Bewacherregisternummer AG:</div>
-                      <div className='font-semibold'>{watch('agNumber')}</div>
-                      <div>Bewacherregisternummer Ma:</div>
-                      <div className='font-semibold'>{watch('maNumber')}</div>
-                      <div>Barcode:</div>
-                      <div className='font-semibold'>{watch('barcode')}</div>
+                    <div className='space-y-1'>
+                      <div className='flex gap-2'>
+                        <span className='whitespace-nowrap'>Bewacherregisternummer AG:</span>
+                        <span className='font-semibold'>{watch('agNumber')}</span>
+                      </div>
+                      <div className='flex gap-2'>
+                        <span className='whitespace-nowrap'>Bewacherregisternummer Ma:</span>
+                        <span className='font-semibold'>{watch('maNumber')}</span>
+                      </div>
+                      <div className='flex gap-2'>
+                        <span className='whitespace-nowrap'>Barcode:</span>
+                        <span className='font-semibold'>{watch('barcode')}</span>
+                      </div>
                     </div>
                     <div className='flex items-end justify-end'>
                       {barcodeUrl && (
