@@ -266,13 +266,26 @@ export default function Home() {
     drawText(watch('idNumber') || '', pad + pxToMm(100), textY2, 9, true)
     const qrSize = pxToMm(80) // h-20 w-20 = 80px
     if (qrDataUrl)
-      pdf.addImage(qrDataUrl, 'PNG', W - pad - qrSize, bandY + pxToMm(8), qrSize, qrSize)
+      pdf.addImage(
+        qrDataUrl,
+        'PNG',
+        W - pad - qrSize,
+        bandY + pxToMm(8),
+        qrSize,
+        qrSize
+      )
 
+    // Gray separator section (matching preview)
+    const separatorY = bandY + bandHeight
+    const separatorHeight = pxToMm(16) // h-4 = 16px
+    pdf.setFillColor(...rgb('#f3f4f6')) // bg-gray-100
+    pdf.rect(0, separatorY, W, separatorHeight, 'F')
+    
     // Details block - with separator line
-    let y = bandY + 32
-    // Add separator line
-    pdf.setDrawColor(...borderColor)
-    pdf.line(pad, y - 4, W - pad, y - 4)
+    let y = separatorY + separatorHeight + pxToMm(16) // p-4 top padding
+    // Add separator line (border-t)
+    pdf.setDrawColor(...rgb('#e5e7eb'))
+    pdf.line(0, separatorY + separatorHeight, W, separatorY + separatorHeight)
 
     drawText('Der/Die Inhaber/in ist Mitarbeiter/in der Firma:', pad, y, 9)
     y += 6
