@@ -295,13 +295,18 @@ export default function Home() {
     const separatorHeight = pxToMm(16) // h-4 = 16px
     pdf.setFillColor(...rgb('#f3f4f6')) // bg-gray-100
     pdf.rect(pad, separatorY, W - 2 * pad, separatorHeight, 'F') // Apply padding
-    
+
     // Details block - with separator line
     let y = separatorY + separatorHeight + pxToMm(16) // p-4 top padding
     // Add separator line (border-t)
     pdf.setDrawColor(...rgb('#e5e7eb'))
-    pdf.line(pad, separatorY + separatorHeight, W - pad, separatorY + separatorHeight)
-    
+    pdf.line(
+      pad,
+      separatorY + separatorHeight,
+      W - pad,
+      separatorY + separatorHeight
+    )
+
     drawText('Der/Die Inhaber/in ist Mitarbeiter/in der Firma:', pad, y, 9)
     y += pxToMm(24) // mb-1 + spacing
     const addressLines = (watch('address') || '').split('\n')
