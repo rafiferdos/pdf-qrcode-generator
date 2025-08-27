@@ -138,7 +138,13 @@ export default function Home() {
   }
 
   return (
-    <div className='min-h-dvh w-full bg-[radial-gradient(80%_60%_at_50%_-20%,oklch(0.98_0_0)_0%,transparent_60%),linear-gradient(180deg,oklch(0.99_0_0),oklch(0.96_0_0))]'>
+    <div
+      className='min-h-dvh w-full'
+      style={{
+        background:
+          'radial-gradient(80% 60% at 50% -20%, #fafafa 0%, rgba(250,250,250,0) 60%), linear-gradient(180deg, #ffffff, #f3f4f6)',
+      }}
+    >
       <div className='mx-auto max-w-6xl px-4 py-10'>
         <h1 className='text-2xl font-semibold mb-6'>ID Card Generator</h1>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 items-start'>
