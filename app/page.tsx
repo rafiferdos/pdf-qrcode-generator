@@ -212,11 +212,11 @@ export default function Home() {
     const outerPad = pxToMm(12) // p-3 = 12px padding
     const pad = pxToMm(16) // Exact conversion of p-4 (16px) to mm for inner content
     const borderColor = rgb('#e5e7eb')
-    
+
     // Gray background (matching preview bg-gray-400)
     pdf.setFillColor(...rgb('#f3f4f6'))
     pdf.rect(0, 0, W, H, 'F')
-    
+
     // White card background with rounded corners
     pdf.setDrawColor(...borderColor)
     pdf.setFillColor(255, 255, 255)
