@@ -115,19 +115,25 @@ export default function Home() {
 
   const downloadPdf = async () => {
     if (!previewRef.current) return
-    const canvas = await html2canvas(previewRef.current, {
+    const elem = previewRef.current
+    const rect = elem.getBoundingClientRect()
+    const canvas = await html2canvas(elem, {
       backgroundColor: '#ffffff',
-      scale: 2,
+      scale: Math.max(2, window.devicePixelRatio || 1),
       useCORS: true,
+      imageTimeout: 0,
     })
     const imgData = canvas.toDataURL('image/png')
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
-    const pageWidth = 210
-    const margin = 10
-    const width = pageWidth - margin * 2
-    const ratio = canvas.height / canvas.width
-    const height = width * ratio
-    pdf.addImage(imgData, 'PNG', margin, margin, width, height)
+    // PDF size same as preview (1:1) so it matches exactly
+    const pxToMm = (px: number) => (px * 25.4) / 96
+    const pdfW = pxToMm(rect.width)
+    const pdfH = pxToMm(rect.height)
+    const pdf = new jsPDF({
+      orientation: pdfW > pdfH ? 'landscape' : 'portrait',
+      unit: 'mm',
+      format: [pdfW, pdfH],
+    })
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfW, pdfH)
     pdf.save(`id-card-${watch('idNumber') || 'preview'}.pdf`)
   }
 
@@ -141,111 +147,98 @@ export default function Home() {
               <CardTitle>Details</CardTitle>
             </CardHeader>
             <CardContent>
-              <form
-                className='grid grid-cols-1 sm:grid-cols-2 gap-4'
-                onSubmit={handleSubmit(onSubmit)}
-              >
-                <div className='sm:col-span-1'>
-                  <Label htmlFor='firstName'>First name</Label>
-                  <Input
-                    id='firstName'
-                    placeholder='Jawid'
-                    {...register('firstName')}
-                  />
+              <form className='grid grid-cols-1 gap-6' onSubmit={handleSubmit(onSubmit)}>
+                <div className='text-xs uppercase tracking-wide text-muted-foreground'>Person</div>
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                  <div>
+                    <Label htmlFor='firstName'>First name</Label>
+                    <Input id='firstName' placeholder='Jawid' {...register('firstName')} />
+                  </div>
+                  <div>
+                    <Label htmlFor='lastName'>Last name</Label>
+                    <Input id='lastName' placeholder='Zadran' {...register('lastName')} />
+                  </div>
+                  <div>
+                    <Label htmlFor='personalNumber'>Personalnummer</Label>
+                    <Input id='personalNumber' {...register('personalNumber')} />
+                  </div>
+                  <div>
+                    <Label htmlFor='idNumber'>Ausweisnummer</Label>
+                    <Input id='idNumber' {...register('idNumber')} />
+                  </div>
                 </div>
-                <div className='sm:col-span-1'>
-                  <Label htmlFor='lastName'>Last name</Label>
-                  <Input
-                    id='lastName'
-                    placeholder='Zadran'
-                    {...register('lastName')}
-                  />
+
+                <div className='text-xs uppercase tracking-wide text-muted-foreground'>Company</div>
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                  <div className='sm:col-span-2'>
+                    <Label htmlFor='company'>Company</Label>
+                    <Input id='company' {...register('company')} />
+                  </div>
+                  <div className='sm:col-span-2'>
+                    <Label htmlFor='address'>Address</Label>
+                    <Textarea id='address' rows={2} {...register('address')} />
+                  </div>
+                  <div>
+                    <Label htmlFor='phone'>Tel</Label>
+                    <Input id='phone' {...register('phone')} />
+                  </div>
+                  <div>
+                    <Label htmlFor='fax'>Fax</Label>
+                    <Input id='fax' {...register('fax')} />
+                  </div>
                 </div>
-                <div>
-                  <Label htmlFor='personalNumber'>Personalnummer</Label>
-                  <Input id='personalNumber' {...register('personalNumber')} />
+
+                <div className='text-xs uppercase tracking-wide text-muted-foreground'>Registry</div>
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                  <div>
+                    <Label htmlFor='agNumber'>Bewacherregisternummer AG</Label>
+                    <Input id='agNumber' {...register('agNumber')} />
+                  </div>
+                  <div>
+                    <Label htmlFor='maNumber'>Bewacherregisternummer Ma</Label>
+                    <Input id='maNumber' {...register('maNumber')} />
+                  </div>
+                  <div className='sm:col-span-2'>
+                    <Label htmlFor='barcode'>Barcode</Label>
+                    <Input id='barcode' {...register('barcode')} />
+                  </div>
                 </div>
-                <div>
-                  <Label htmlFor='idNumber'>Ausweisnummer</Label>
-                  <Input id='idNumber' {...register('idNumber')} />
+
+                <div className='text-xs uppercase tracking-wide text-muted-foreground'>Validity</div>
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                  <div>
+                    <Label htmlFor='createdAt'>Erstelldatum</Label>
+                    <Input id='createdAt' placeholder='06.06.2025' {...register('createdAt')} />
+                  </div>
+                  <div>
+                    <Label htmlFor='validTill'>Gültig bis</Label>
+                    <Input id='validTill' placeholder='06.06.2027' {...register('validTill')} />
+                  </div>
+                  <div className='sm:col-span-2'>
+                    <Label htmlFor='note'>Note</Label>
+                    <Textarea id='note' rows={2} {...register('note')} />
+                  </div>
                 </div>
-                <div className='sm:col-span-2'>
-                  <Label htmlFor='company'>Company</Label>
-                  <Input id='company' {...register('company')} />
+
+                <div className='text-xs uppercase tracking-wide text-muted-foreground'>Uploads</div>
+                <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
+                  <div>
+                    <Label>Upload Photo</Label>
+                    <Input type='file' accept='image/*' onChange={(e) => onImage(e, setPhotoUrl)} />
+                  </div>
+                  <div>
+                    <Label>Signature AN</Label>
+                    <Input type='file' accept='image/*' onChange={(e) => onImage(e, setSignAnUrl)} />
+                  </div>
+                  <div>
+                    <Label>Signature AG</Label>
+                    <Input type='file' accept='image/*' onChange={(e) => onImage(e, setSignAgUrl)} />
+                  </div>
                 </div>
-                <div className='sm:col-span-2'>
-                  <Label htmlFor='address'>Address</Label>
-                  <Textarea id='address' rows={2} {...register('address')} />
-                </div>
-                <div>
-                  <Label htmlFor='phone'>Tel</Label>
-                  <Input id='phone' {...register('phone')} />
-                </div>
-                <div>
-                  <Label htmlFor='fax'>Fax</Label>
-                  <Input id='fax' {...register('fax')} />
-                </div>
-                <div>
-                  <Label htmlFor='agNumber'>Bewacherregisternummer AG</Label>
-                  <Input id='agNumber' {...register('agNumber')} />
-                </div>
-                <div>
-                  <Label htmlFor='maNumber'>Bewacherregisternummer Ma</Label>
-                  <Input id='maNumber' {...register('maNumber')} />
-                </div>
-                <div>
-                  <Label htmlFor='barcode'>Barcode</Label>
-                  <Input id='barcode' {...register('barcode')} />
-                </div>
-                <div>
-                  <Label htmlFor='createdAt'>Erstelldatum</Label>
-                  <Input
-                    id='createdAt'
-                    placeholder='06.06.2025'
-                    {...register('createdAt')}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor='validTill'>Gültig bis</Label>
-                  <Input
-                    id='validTill'
-                    placeholder='06.06.2027'
-                    {...register('validTill')}
-                  />
-                </div>
-                <div className='sm:col-span-2'>
-                  <Label htmlFor='note'>Note</Label>
-                  <Textarea id='note' rows={2} {...register('note')} />
-                </div>
-                <div>
-                  <Label>Upload Photo</Label>
-                  <Input
-                    type='file'
-                    accept='image/*'
-                    onChange={(e) => onImage(e, setPhotoUrl)}
-                  />
-                </div>
-                <div>
-                  <Label>Signature AN</Label>
-                  <Input
-                    type='file'
-                    accept='image/*'
-                    onChange={(e) => onImage(e, setSignAnUrl)}
-                  />
-                </div>
-                <div>
-                  <Label>Signature AG</Label>
-                  <Input
-                    type='file'
-                    accept='image/*'
-                    onChange={(e) => onImage(e, setSignAgUrl)}
-                  />
-                </div>
-                <div className='sm:col-span-2 flex gap-3 mt-2'>
+
+                <div className='flex gap-3 mt-2'>
                   <Button type='submit'>Update Preview</Button>
-                  <Button type='button' variant='outline' onClick={downloadPdf}>
-                    Download PDF
-                  </Button>
+                  <Button type='button' variant='outline' onClick={downloadPdf}>Download PDF</Button>
                 </div>
               </form>
             </CardContent>
@@ -368,33 +361,27 @@ export default function Home() {
                   </div>
 
                   <div className='grid grid-cols-2 items-end gap-6 mt-6'>
-                    <div
-                      className='pt-2 text-center text-sm'
-                      style={{ borderTop: '1px solid #e5e7eb' }}
-                    >
-                      Unterschrift AN
-                      {signAnUrl && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={signAnUrl as string}
-                          alt='sign an'
-                          className='h-14 -mt-10 mx-auto'
-                        />
-                      )}
+                    {/* Signature AN */}
+                    <div className='text-center text-sm'>
+                      <div style={{ borderTop: '1px solid #e5e7eb' }} />
+                      <div className='h-20 flex items-end justify-center py-2'>
+                        {signAnUrl && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={signAnUrl as string} alt='sign an' className='max-h-full object-contain' />
+                        )}
+                      </div>
+                      <div style={{ color: '#374151' }}>Unterschrift AN</div>
                     </div>
-                    <div
-                      className='pt-2 text-center text-sm'
-                      style={{ borderTop: '1px solid #e5e7eb' }}
-                    >
-                      Unterschrift AG
-                      {signAgUrl && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={signAgUrl as string}
-                          alt='sign ag'
-                          className='h-14 -mt-10 mx-auto'
-                        />
-                      )}
+                    {/* Signature AG */}
+                    <div className='text-center text-sm'>
+                      <div style={{ borderTop: '1px solid #e5e7eb' }} />
+                      <div className='h-20 flex items-end justify-center py-2'>
+                        {signAgUrl && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={signAgUrl as string} alt='sign ag' className='max-h-full object-contain' />
+                        )}
+                      </div>
+                      <div style={{ color: '#374151' }}>Unterschrift AG</div>
                     </div>
                   </div>
 
