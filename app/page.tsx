@@ -210,26 +210,12 @@ export default function Home() {
     }
 
     // Background card with border
-    const pad = 6
+    const pad = pxToMm(16) // Exact conversion of p-4 (16px) to mm
     const borderColor = rgb('#e5e7eb')
     pdf.setDrawColor(...borderColor)
     pdf.setFillColor(255, 255, 255)
-    const anyPdf = pdf as unknown as {
-      roundedRect?: (
-        x: number,
-        y: number,
-        w: number,
-        h: number,
-        rx: number,
-        ry?: number,
-        style?: string
-      ) => void
-    }
-    if (typeof anyPdf.roundedRect === 'function') {
-      anyPdf.roundedRect(1.5, 1.5, W - 3, H - 3, 3, 3, 'DF')
-    } else {
-      pdf.rect(1.5, 1.5, W - 3, H - 3, 'DF')
-    }
+    // No border rectangle - the preview doesn't show one
+    pdf.rect(0, 0, W, H, 'F') // Just fill with white
 
     // Header: photo (left) + company logo and name (right)
     const photoW = 34,
