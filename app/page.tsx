@@ -347,7 +347,7 @@ export default function Home() {
         barcodeWidth,
         barcodeHeight
       )
-    
+
     // Add extra spacing to prevent overlapping
     y += pxToMm(40) // Additional spacing after barcode section
 
