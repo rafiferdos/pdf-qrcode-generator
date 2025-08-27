@@ -345,10 +345,14 @@ export default function Home() {
 
     // Dates footer
     pdf.setFontSize(9)
-    drawText(`Erstelldatum: ${watch('createdAt') || ''}`, pad, H - 6, 9)
+    const leftText = `Erstelldatum: ${watch('createdAt') || ''}`
     const rightText = `Gültig bis: ${watch('validTill') || ''}`
-    const tw = pdf.getTextWidth(rightText)
-    pdf.text(rightText, W - pad - tw, H - 6)
+    const leftWidth = pdf.getTextWidth(leftText)
+    const rightWidth = pdf.getTextWidth(rightText)
+    const totalWidth = leftWidth + rightWidth + 10 // 10mm gap between dates
+    const startX = (W - totalWidth) / 2
+    drawText(leftText, startX, H - 6, 9)
+    drawText(rightText, startX + leftWidth + 10, H - 6, 9)
 
     pdf.save(`id-card-${watch('idNumber') || 'preview'}.pdf`)
   }
@@ -624,16 +628,26 @@ export default function Home() {
                   <div className='grid grid-cols-2 gap-x-6 mt-3'>
                     <div className='space-y-1'>
                       <div className='flex gap-2'>
-                        <span className='whitespace-nowrap'>Bewacherregisternummer AG:</span>
-                        <span className='font-semibold'>{watch('agNumber')}</span>
+                        <span className='whitespace-nowrap'>
+                          Bewacherregisternummer AG:
+                        </span>
+                        <span className='font-semibold'>
+                          {watch('agNumber')}
+                        </span>
                       </div>
                       <div className='flex gap-2'>
-                        <span className='whitespace-nowrap'>Bewacherregisternummer Ma:</span>
-                        <span className='font-semibold'>{watch('maNumber')}</span>
+                        <span className='whitespace-nowrap'>
+                          Bewacherregisternummer Ma:
+                        </span>
+                        <span className='font-semibold'>
+                          {watch('maNumber')}
+                        </span>
                       </div>
                       <div className='flex gap-2'>
                         <span className='whitespace-nowrap'>Barcode:</span>
-                        <span className='font-semibold'>{watch('barcode')}</span>
+                        <span className='font-semibold'>
+                          {watch('barcode')}
+                        </span>
                       </div>
                     </div>
                     <div className='flex items-end justify-end'>
@@ -686,7 +700,7 @@ export default function Home() {
                     </p>
                   )}
 
-                  <div className='flex items-center justify-between text-[13px] mt-3'>
+                  <div className='flex items-center justify-center gap-4 text-[13px] mt-3'>
                     <div>Erstelldatum: {watch('createdAt')}</div>
                     <div>Gültig bis: {watch('validTill')}</div>
                   </div>
