@@ -237,8 +237,8 @@ export default function Home() {
     let headerY = pad
     try {
       const logoPng = await rasterizeToPng('/logo-united.png')
-      const logoWmm = Math.min(119, headerWidth)
-      const logoHmm = 48
+      const logoWmm = Math.min(80, headerWidth) // Reduced from 119 to 80
+      const logoHmm = 32 // Reduced from 48 to 32
       const logoX = headerX + (headerWidth - logoWmm) / 2
       pdf.addImage(logoPng, 'PNG', logoX, headerY, logoWmm, logoHmm)
       headerY += logoHmm + 2
@@ -264,7 +264,7 @@ export default function Home() {
 
     // Info band with QR
     const bandY = nameBarY + nameBarHeight
-    const bandHeight = pxToMm(80) // py-4 = 32px + content ≈ 80px total
+    const bandHeight = pxToMm(100) // Increased from 80 to 100 for better QR accommodation
     pdf.setFillColor(...rgb('#bfdbfe')) // Matching the preview color
     pdf.rect(pad, bandY, W - 2 * pad, bandHeight, 'F') // Apply padding
     const textY1 = bandY + pxToMm(20)
