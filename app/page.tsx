@@ -333,10 +333,10 @@ export default function Home() {
     const sigSectionY = y + pxToMm(64) // h-16 spacing above signature area
     const sigAreaHeight = pxToMm(80) // h-20 increased signature area
     const lineY = sigSectionY + sigAreaHeight // lines below signatures
-    
+
     const signAnImg = await ensureSupported(signAnUrl)
     const signAgImg = await ensureSupported(signAgUrl)
-    
+
     // Draw signatures ABOVE the lines
     if (signAnImg)
       pdf.addImage(
@@ -356,16 +356,26 @@ export default function Home() {
         W / 2 - pxToMm(24),
         sigAreaHeight - pxToMm(16)
       )
-    
+
     // Draw lines BELOW signatures
     pdf.setDrawColor(...rgb('#e5e7eb'))
     pdf.line(pad, lineY, W / 2 - pxToMm(12), lineY) // gap-6/2
     pdf.line(W / 2 + pxToMm(12), lineY, W - pad, lineY)
-      
+
     // Signature labels below lines
     const labelY = lineY + pxToMm(12)
-    drawText('Unterschrift AN', pad + (W / 2 - pxToMm(24)) / 2 - pxToMm(30), labelY, 8)
-    drawText('Unterschrift AG', W / 2 + pxToMm(12) + (W / 2 - pxToMm(24)) / 2 - pxToMm(30), labelY, 8)
+    drawText(
+      'Unterschrift AN',
+      pad + (W / 2 - pxToMm(24)) / 2 - pxToMm(30),
+      labelY,
+      8
+    )
+    drawText(
+      'Unterschrift AG',
+      W / 2 + pxToMm(12) + (W / 2 - pxToMm(24)) / 2 - pxToMm(30),
+      labelY,
+      8
+    )
 
     // Note - matching preview mt-4
     const note = (watch('note') || '').trim()
