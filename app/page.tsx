@@ -172,11 +172,10 @@ export default function Home() {
       }
     }
     const pxToMm = (px: number) => (px * 25.4) / 96
-    // Get the inner white card dimensions (excluding p-3 padding)
+    // Get the outer container dimensions (including p-3 padding)
     const outerContainer = previewRef.current
-    const innerCard = outerContainer?.querySelector('.bg-white') as HTMLElement
-    const wPx = innerCard?.clientWidth || 680 - 24 // 680px - 12px padding on each side
-    const hPx = innerCard?.clientHeight || 940 - 24 // estimated height - padding
+    const wPx = outerContainer?.clientWidth || 680 // Full container width
+    const hPx = outerContainer?.clientHeight || 940 // Full container height
     const W = pxToMm(wPx)
     const H = pxToMm(hPx)
     const pdf = new jsPDF({
@@ -209,13 +208,23 @@ export default function Home() {
       pdf.text(text, x, y)
     }
 
-    // Background card with border
-    const pad = pxToMm(16) // Exact conversion of p-4 (16px) to mm
+    // Background with overall p-3 padding
+    const outerPad = pxToMm(12) // p-3 = 12px padding
+    const pad = pxToMm(16) // Exact conversion of p-4 (16px) to mm for inner content
     const borderColor = rgb('#e5e7eb')
+    
+    // Gray background (matching preview bg-gray-400)
+    pdf.setFillColor(...rgb('#f3f4f6'))
+    pdf.rect(0, 0, W, H, 'F')
+    
+    // White card background with rounded corners
     pdf.setDrawColor(...borderColor)
     pdf.setFillColor(255, 255, 255)
-    // No border rectangle - the preview doesn't show one
-    pdf.rect(0, 0, W, H, 'F') // Just fill with white
+    const cardX = outerPad
+    const cardY = outerPad
+    const cardW = W - 2 * outerPad
+    const cardH = H - 2 * outerPad
+    pdf.rect(cardX, cardY, cardW, cardH, 'DF')
 
     // Header: photo (left) + company logo and name (right)
     const photoW = pxToMm(120), // Exact match to w-[120px]
