@@ -124,6 +124,54 @@ export default function Home() {
   const onSubmit = () => {}
   const downloadPdf = async () => {
     // Programmatic jsPDF drawing (no html2canvas) to avoid color parsing errors
+    type ImgType = 'PNG' | 'JPEG' | 'WEBP'
+    const getMimeFromDataUrl = (url: string | null): string | null => {
+      if (!url) return null
+      const m = url.match(/^data:([^;]+);base64,/i)
+      return m?.[1] || null
+    }
+    const getJsPdfType = (mime: string | null): ImgType | null => {
+      if (!mime) return null
+      const m = mime.toLowerCase()
+      if (m === 'image/png') return 'PNG'
+      if (m === 'image/jpeg' || m === 'image/jpg') return 'JPEG'
+      if (m === 'image/webp') return 'WEBP'
+      return null
+    }
+    const rasterizeToPng = (url: string): Promise<string> =>
+      new Promise((resolve, reject) => {
+        const img = new Image()
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          canvas.width = img.naturalWidth || img.width
+          canvas.height = img.naturalHeight || img.height
+          const ctx = canvas.getContext('2d')
+          if (!ctx) return reject(new Error('Canvas 2D context not available'))
+          ctx.drawImage(img, 0, 0)
+          try {
+            resolve(canvas.toDataURL('image/png'))
+          } catch (e) {
+            reject(e)
+          }
+        }
+        img.onerror = () => reject(new Error('Image load failed'))
+        img.src = url
+      })
+    const ensureSupported = async (
+      url: string | null
+    ): Promise<{ url: string; type: ImgType } | null> => {
+      if (!url) return null
+      const mime = getMimeFromDataUrl(url)
+      const t = getJsPdfType(mime)
+      if (t === 'PNG' || t === 'JPEG') return { url, type: t }
+      // Convert WEBP or unknown to PNG
+      try {
+        const png = await rasterizeToPng(url)
+        return { url: png, type: 'PNG' }
+      } catch {
+        return null
+      }
+    }
     const pxToMm = (px: number) => (px * 25.4) / 96
     const wPx = previewRef.current?.clientWidth || 680
     const hPx = previewRef.current?.clientHeight || 940
@@ -184,8 +232,8 @@ export default function Home() {
     // Header: photo + logotype
     const photoW = 34,
       photoH = 40
-    if (photoUrl)
-      pdf.addImage(photoUrl as string, 'PNG', pad, pad, photoW, photoH)
+    const photoImg = await ensureSupported(photoUrl)
+    if (photoImg) pdf.addImage(photoImg.url, photoImg.type, pad, pad, photoW, photoH)
     drawText('UNITED', pad + photoW + 8, pad + 10, 16, true)
     drawText('SECURITY', pad + photoW + 8, pad + 20, 14, true)
     pdf.setTextColor(...rgb('#6b7280'))
@@ -244,26 +292,28 @@ export default function Home() {
     y += 6
     drawText('Barcode:', pad, y, 9)
     drawText(watch('barcode') || '', pad + 25, y, 9, true)
-    if (barcodeUrl) pdf.addImage(barcodeUrl, 'PNG', W - pad - 40, y - 8, 40, 10)
+  if (barcodeUrl) pdf.addImage(barcodeUrl, 'PNG', W - pad - 40, y - 8, 40, 10)
 
     // Signatures
     const sigTop = H - 38
     pdf.setDrawColor(...borderColor)
     pdf.line(pad, sigTop, W / 2 - pad, sigTop)
     pdf.line(W / 2 + pad, sigTop, W - pad, sigTop)
-    if (signAnUrl)
+    const signAnImg = await ensureSupported(signAnUrl)
+    const signAgImg = await ensureSupported(signAgUrl)
+    if (signAnImg)
       pdf.addImage(
-        signAnUrl as string,
-        'PNG',
+        signAnImg.url,
+        signAnImg.type,
         pad,
         sigTop - 16,
         W / 2 - 2 * pad,
         12
       )
-    if (signAgUrl)
+    if (signAgImg)
       pdf.addImage(
-        signAgUrl as string,
-        'PNG',
+        signAgImg.url,
+        signAgImg.type,
         W / 2 + pad,
         sigTop - 16,
         W / 2 - 2 * pad,
