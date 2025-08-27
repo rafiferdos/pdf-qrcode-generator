@@ -308,6 +308,25 @@ export default function Home() {
                   backgroundColor: '#ffffff',
                   color: '#000000',
                   borderColor: '#e5e7eb',
+                  // Override Tailwind CSS vars with safe sRGB colors so html2canvas doesn't parse oklch/lab
+                  ['--background' as any]: '#ffffff',
+                  ['--foreground' as any]: '#000000',
+                  ['--card' as any]: '#ffffff',
+                  ['--card-foreground' as any]: '#000000',
+                  ['--popover' as any]: '#ffffff',
+                  ['--popover-foreground' as any]: '#000000',
+                  ['--primary' as any]: '#1e40af',
+                  ['--primary-foreground' as any]: '#ffffff',
+                  ['--secondary' as any]: '#f3f4f6',
+                  ['--secondary-foreground' as any]: '#111827',
+                  ['--muted' as any]: '#f3f4f6',
+                  ['--muted-foreground' as any]: '#6b7280',
+                  ['--accent' as any]: '#f3f4f6',
+                  ['--accent-foreground' as any]: '#111827',
+                  ['--destructive' as any]: '#ef4444',
+                  ['--border' as any]: '#e5e7eb',
+                  ['--input' as any]: '#e5e7eb',
+                  ['--ring' as any]: '#1e40af',
                 }}
               >
                 {/* Header with photo and pseudo logo */}
