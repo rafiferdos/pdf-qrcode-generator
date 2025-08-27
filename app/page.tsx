@@ -249,13 +249,13 @@ export default function Home() {
     const nameBarY = pad + photoH + pxToMm(16) // Add gap between photo section and name section
     const nameBarHeight = pxToMm(48) // py-2 + text-2xl ≈ 48px total height
     pdf.setFillColor(...rgb('#1e40af'))
-    pdf.rect(0, nameBarY, W, nameBarHeight, 'F')
+    pdf.rect(pad, nameBarY, W - 2 * pad, nameBarHeight, 'F') // Apply padding
     pdf.setTextColor(255, 255, 255)
     drawText(
       `${(watch('lastName') || '').trim()}, ${(
         watch('firstName') || ''
       ).trim()}`,
-      pad,
+      pad * 2, // Double padding for text inside
       nameBarY + nameBarHeight * 0.7, // Vertically center the text
       12,
       true
