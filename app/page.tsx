@@ -288,15 +288,20 @@ export default function Home() {
     pdf.line(0, separatorY + separatorHeight, W, separatorY + separatorHeight)
 
     drawText('Der/Die Inhaber/in ist Mitarbeiter/in der Firma:', pad, y, 9)
-    y += 6
+    y += pxToMm(24) // mb-1 + spacing
     const addressLines = (watch('address') || '').split('\n')
     addressLines.forEach((line) => {
       drawText(line, pad, y, 9)
-      y += 5
+      y += pxToMm(20) // line height
     })
-    drawText(`Tel: ${watch('phone') || ''}`, W - pad - 45, bandY + 35, 9)
-    if (watch('fax'))
-      drawText(`Fax: ${watch('fax')}`, W - pad - 45, bandY + 40, 9)
+    // Tel/Fax on the right side
+    const rightColX = W - pad - pxToMm(120)
+    let rightY = y - pxToMm(20 * addressLines.length) + pxToMm(20)
+    drawText(`Tel: ${watch('phone') || ''}`, rightColX, rightY, 9)
+    if (watch('fax')) {
+      rightY += pxToMm(20)
+      drawText(`Fax: ${watch('fax')}`, rightColX, rightY, 9)
+    }
 
     // Registry and barcode
     y += 2
