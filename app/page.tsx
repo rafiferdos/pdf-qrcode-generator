@@ -218,12 +218,12 @@ export default function Home() {
     pdf.rect(0, 0, W, H, 'F') // Just fill with white
 
     // Header: photo (left) + company logo and name (right)
-    const photoW = 34,
-      photoH = 40
+    const photoW = pxToMm(120), // Exact match to w-[120px]
+      photoH = pxToMm(140) // Exact match to h-[140px]
     const photoImg = await ensureSupported(photoUrl)
     if (photoImg)
       pdf.addImage(photoImg.url, photoImg.type, pad, pad, photoW, photoH)
-    const headerX = pad + photoW + 8
+    const headerX = pad + photoW + pxToMm(16) // gap-4 = 16px
     const headerWidth = W - headerX - pad
     let headerY = pad
     try {
@@ -237,16 +237,17 @@ export default function Home() {
     // company name and city text removed from header
 
     // Name bar
-    const nameBarY = pad + photoH + 6
+    const nameBarY = pad + photoH // Directly after the header section
+    const nameBarHeight = pxToMm(48) // py-2 + text-2xl ≈ 48px total height
     pdf.setFillColor(...rgb('#1e40af'))
-    pdf.rect(1.5, nameBarY, W - 3, 9, 'F')
+    pdf.rect(0, nameBarY, W, nameBarHeight, 'F')
     pdf.setTextColor(255, 255, 255)
     drawText(
       `${(watch('lastName') || '').trim()}, ${(
         watch('firstName') || ''
       ).trim()}`,
       pad,
-      nameBarY + 6.5,
+      nameBarY + nameBarHeight * 0.7, // Vertically center the text
       12,
       true
     )
