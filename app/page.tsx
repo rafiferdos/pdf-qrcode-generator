@@ -237,7 +237,7 @@ export default function Home() {
     // company name and city text removed from header
 
     // Name bar
-    const nameBarY = pad + photoH // Directly after the header section
+    const nameBarY = pad + photoH + pxToMm(16) // Add gap between photo section and name section
     const nameBarHeight = pxToMm(48) // py-2 + text-2xl ≈ 48px total height
     pdf.setFillColor(...rgb('#1e40af'))
     pdf.rect(0, nameBarY, W, nameBarHeight, 'F')
