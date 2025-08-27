@@ -7,12 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import Button from '@/components/ui/button'
+
 import { Textarea } from '@/components/ui/textarea'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import QRCode from 'qrcode'
 import JsBarcode from 'jsbarcode'
+import { Button } from '@/components/ui/button'
 
 const FormSchema = z.object({
   firstName: z.string().min(1),
