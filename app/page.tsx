@@ -9,7 +9,6 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 
 import { Textarea } from '@/components/ui/textarea'
-import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import QRCode from 'qrcode'
 import JsBarcode from 'jsbarcode'
@@ -65,83 +64,114 @@ export default function Home() {
   })
 
   const firstName = watch('firstName')
-  const lastName = watch('lastName')
-  const idNumber = watch('idNumber')
-  const barcodeValue = watch('barcode')
-
-  const fullName = useMemo(() => {
-    const f = firstName || ''
-    const l = lastName || ''
-    return `${l}, ${f}`
-  }, [firstName, lastName])
-
-  // Generate QR and barcode on changes
-  useEffect(() => {
-    const id = idNumber
-    if (!id) return
-    QRCode.toDataURL(id, { margin: 0, width: 256 }).then(setQrDataUrl)
-  }, [idNumber])
-
-  useEffect(() => {
-    const code = barcodeValue
-    if (!code) return
-    const canvas = document.createElement('canvas')
-    try {
-      JsBarcode(canvas, code, {
-        format: 'EAN13',
-        displayValue: false,
-        height: 40,
-      })
-      setBarcodeUrl(canvas.toDataURL('image/png'))
-    } catch {
-      // ignore invalid
-      setBarcodeUrl(null)
-    }
-  }, [barcodeValue])
-
-  const onImage = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    set: (v: string | null) => void
-  ) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => set(reader.result as string)
-    reader.readAsDataURL(file)
-  }
-
-  const onSubmit = () => {
-    // nothing special, preview already updates in real time
-  }
-
   const downloadPdf = async () => {
-    if (!previewRef.current) return
-    const elem = previewRef.current
-    const rect = elem.getBoundingClientRect()
-    const canvas = await html2canvas(elem, {
-      backgroundColor: '#ffffff',
-      scale: Math.max(2, window.devicePixelRatio || 1),
-      useCORS: true,
-      imageTimeout: 0,
-    })
-    const imgData = canvas.toDataURL('image/png')
-    // PDF size same as preview (1:1) so it matches exactly
+    // Programmatic jsPDF drawing (no html2canvas) to avoid color parsing errors
     const pxToMm = (px: number) => (px * 25.4) / 96
-    const pdfW = pxToMm(rect.width)
-    const pdfH = pxToMm(rect.height)
-    const pdf = new jsPDF({
-      orientation: pdfW > pdfH ? 'landscape' : 'portrait',
-      unit: 'mm',
-      format: [pdfW, pdfH],
-    })
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfW, pdfH)
+    const wPx = previewRef.current?.clientWidth || 680
+    const hPx = previewRef.current?.clientHeight || 940
+    const W = pxToMm(wPx)
+    const H = pxToMm(hPx)
+    const pdf = new jsPDF({ orientation: W > H ? 'landscape' : 'portrait', unit: 'mm', format: [W, H] })
+
+    const rgb = (hex: string): [number, number, number] => {
+      const h = hex.replace('#', '')
+      const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h
+      const n = parseInt(full, 16)
+      return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
+    }
+    const drawText = (text: string, x: number, y: number, size = 10, bold = false) => {
+      pdf.setFont('helvetica', bold ? 'bold' : 'normal')
+      pdf.setFontSize(size)
+      pdf.text(text, x, y)
+    }
+
+    // Background card with border
+    const pad = 6
+    const borderColor = rgb('#e5e7eb')
+    pdf.setDrawColor(...borderColor)
+    pdf.setFillColor(255, 255, 255)
+    ;(pdf as any).roundedRect?.(1.5, 1.5, W - 3, H - 3, 3, 3, 'DF') || pdf.rect(1.5, 1.5, W - 3, H - 3, 'DF')
+
+    // Header: photo + logotype
+    const photoW = 34, photoH = 40
+    if (photoUrl) pdf.addImage(photoUrl as string, 'PNG', pad, pad, photoW, photoH)
+    drawText('UNITED', pad + photoW + 8, pad + 10, 16, true)
+    drawText('SECURITY', pad + photoW + 8, pad + 20, 14, true)
+    pdf.setTextColor(...rgb('#6b7280'))
+    drawText('M U N I C H', pad + photoW + 8, pad + 27, 7)
+    pdf.setTextColor(0, 0, 0)
+
+    // Name bar
+    const nameBarY = pad + photoH + 6
+    pdf.setFillColor(...rgb('#1e40af'))
+    pdf.rect(1.5, nameBarY, W - 3, 9, 'F')
+    pdf.setTextColor(255, 255, 255)
+    drawText(`${(watch('lastName') || '').trim()}, ${(watch('firstName') || '').trim()}`, pad, nameBarY + 6.5, 12, true)
+    pdf.setTextColor(0, 0, 0)
+
+    // Info band with QR
+    const bandY = nameBarY + 9
+    pdf.setFillColor(...rgb('#eff6ff'))
+    pdf.rect(1.5, bandY, W - 3, 22, 'F')
+    drawText('Personalnummer:', pad, bandY + 8, 9)
+    drawText(watch('personalNumber') || '', pad + 30, bandY + 8, 9, true)
+    drawText('Ausweisnummer:', pad, bandY + 16, 9)
+    drawText(watch('idNumber') || '', pad + 30, bandY + 16, 9, true)
+    if (qrDataUrl) pdf.addImage(qrDataUrl, 'PNG', W - pad - 20, bandY + 2, 20, 20)
+
+    // Details block
+    let y = bandY + 28
+    drawText('Der/Die Inhaber/in ist Mitarbeiter/in der Firma:', pad, y, 9)
+    y += 6
+    drawText(watch('company') || '', pad, y, 10, true)
+    y += 5
+    const addressLines = (watch('address') || '').split('\n')
+    addressLines.forEach((line) => { drawText(line, pad, y, 9); y += 5 })
+    drawText(`Tel: ${watch('phone') || ''}`, W - pad - 45, bandY + 35, 9)
+    if (watch('fax')) drawText(`Fax: ${watch('fax')}`, W - pad - 45, bandY + 40, 9)
+
+    // Registry and barcode
+    y += 2
+    drawText('Bewacherregisternummer AG:', pad, y, 9)
+    drawText(watch('agNumber') || '', pad + 52, y, 9, true)
+    y += 6
+    drawText('Bewacherregisternummer Ma:', pad, y, 9)
+    drawText(watch('maNumber') || '', pad + 52, y, 9, true)
+    y += 6
+    drawText('Barcode:', pad, y, 9)
+    drawText(watch('barcode') || '', pad + 25, y, 9, true)
+    if (barcodeUrl) pdf.addImage(barcodeUrl, 'PNG', W - pad - 40, y - 8, 40, 10)
+
+    // Signatures
+    const sigTop = H - 38
+    pdf.setDrawColor(...borderColor)
+    pdf.line(pad, sigTop, W/2 - pad, sigTop)
+    pdf.line(W/2 + pad, sigTop, W - pad, sigTop)
+    if (signAnUrl) pdf.addImage(signAnUrl as string, 'PNG', pad, sigTop - 16, (W/2) - 2*pad, 12)
+    if (signAgUrl) pdf.addImage(signAgUrl as string, 'PNG', W/2 + pad, sigTop - 16, (W/2) - 2*pad, 12)
+    drawText('Unterschrift AN', pad + ((W/2 - 2*pad)/2) - 16, sigTop + 6, 8)
+    drawText('Unterschrift AG', W/2 + pad + ((W/2 - 2*pad)/2) - 16, sigTop + 6, 8)
+
+    // Note
+    const note = (watch('note') || '').trim()
+    if (note) {
+      pdf.setTextColor(...rgb('#374151'))
+      pdf.setFont('helvetica', 'normal')
+      pdf.setFontSize(9)
+      const split = pdf.splitTextToSize(note, W - 2*pad)
+      pdf.text(split, pad, sigTop + 14)
+      pdf.setTextColor(0,0,0)
+    }
+
+    // Dates footer
+    pdf.setFontSize(9)
+    drawText(`Erstelldatum: ${watch('createdAt') || ''}`, pad, H - 6, 9)
+    const rightText = `Gültig bis: ${watch('validTill') || ''}`
+    const tw = pdf.getTextWidth(rightText)
+    pdf.text(rightText, W - pad - tw, H - 6)
+
     pdf.save(`id-card-${watch('idNumber') || 'preview'}.pdf`)
   }
-
-  return (
-    <div
-      className='min-h-dvh w-full'
-      style={{
         background:
           'radial-gradient(80% 60% at 50% -20%, #fafafa 0%, rgba(250,250,250,0) 60%), linear-gradient(180deg, #ffffff, #f3f4f6)',
       }}
