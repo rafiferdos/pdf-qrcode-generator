@@ -239,8 +239,8 @@ export default function Home() {
     let headerY = pad
     try {
       const logoPng = await rasterizeToPng('/logo-united.png')
-      const logoWmm = Math.min(30, headerWidth)
-      const logoHmm = 12
+      const logoWmm = Math.min(70, headerWidth)
+      const logoHmm = 28
       const logoX = headerX + (headerWidth - logoWmm) / 2
       pdf.addImage(logoPng, 'PNG', logoX, headerY, logoWmm, logoHmm)
       headerY += logoHmm + 2
@@ -566,7 +566,7 @@ export default function Home() {
                         <img
                           src='/logo-united.png'
                           alt='company logo'
-                          className='h-12 object-contain mb-1'
+                          className='h-28 object-contain mb-1'
                         />
                         {/* Company name and city text removed; logo-only header */}
                       </div>
