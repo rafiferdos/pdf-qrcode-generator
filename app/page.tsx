@@ -717,7 +717,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className='grid grid-cols-2 items-end gap-6 mt-6'>
+                    <div className='grid grid-cols-2 items-end gap-6 mt-2'>
                       {/* Signature AN */}
                       <div className='text-center text-sm'>
                         <div className='h-16'></div>
