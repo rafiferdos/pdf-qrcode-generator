@@ -238,22 +238,14 @@ export default function Home() {
     const headerWidth = W - headerX - pad
     let headerY = pad
     try {
-      const logoPng = await rasterizeToPng('/logo-united.svg')
+      const logoPng = await rasterizeToPng('/logo-united.png')
       const logoWmm = Math.min(30, headerWidth)
       const logoHmm = 12
       const logoX = headerX + (headerWidth - logoWmm) / 2
       pdf.addImage(logoPng, 'PNG', logoX, headerY, logoWmm, logoHmm)
       headerY += logoHmm + 2
     } catch {}
-    // company name removed from header
-    pdf.setTextColor(...rgb('#6b7280'))
-    pdf.setFont('helvetica', 'normal')
-    pdf.setFontSize(7)
-    const city = 'M U N I C H'
-    const twCity = pdf.getTextWidth(city)
-    const cityX = headerX + (headerWidth - twCity) / 2
-    pdf.text(city, cityX, headerY + 6)
-    pdf.setTextColor(0, 0, 0)
+    // company name and city text removed from header
 
     // Name bar
     const nameBarY = pad + photoH + 6
