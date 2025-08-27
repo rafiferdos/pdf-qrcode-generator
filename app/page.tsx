@@ -285,7 +285,7 @@ export default function Home() {
         qrDataUrl,
         'PNG',
         W - pad * 2 - qrSize, // Account for both outer and inner padding
-        bandY + pxToMm(8),
+        bandY + pxToMm(10), // Better centering in taller section
         qrSize,
         qrSize
       )
