@@ -270,7 +270,13 @@ export default function Home() {
     const textY1 = bandY + pxToMm(20)
     const textY2 = bandY + pxToMm(40)
     drawText('Personalnummer:', pad * 2, textY1, 9) // Double padding for text inside
-    drawText(watch('personalNumber') || '', pad * 2 + pxToMm(100), textY1, 9, true)
+    drawText(
+      watch('personalNumber') || '',
+      pad * 2 + pxToMm(100),
+      textY1,
+      9,
+      true
+    )
     drawText('Ausweisnummer:', pad * 2, textY2, 9)
     drawText(watch('idNumber') || '', pad * 2 + pxToMm(100), textY2, 9, true)
     const qrSize = pxToMm(80) // h-20 w-20 = 80px
