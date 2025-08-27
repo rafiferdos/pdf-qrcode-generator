@@ -141,25 +141,14 @@ export default function Home() {
               <CardTitle>Details</CardTitle>
             </CardHeader>
             <CardContent>
-              <form
-                className='grid grid-cols-1 sm:grid-cols-2 gap-4'
-                onSubmit={handleSubmit(onSubmit)}
-              >
+              <form className='grid grid-cols-1 sm:grid-cols-2 gap-4' onSubmit={handleSubmit(onSubmit)}>
                 <div className='sm:col-span-1'>
                   <Label htmlFor='firstName'>First name</Label>
-                  <Input
-                    id='firstName'
-                    placeholder='Jawid'
-                    {...register('firstName')}
-                  />
+                  <Input id='firstName' placeholder='Jawid' {...register('firstName')} />
                 </div>
                 <div className='sm:col-span-1'>
                   <Label htmlFor='lastName'>Last name</Label>
-                  <Input
-                    id='lastName'
-                    placeholder='Zadran'
-                    {...register('lastName')}
-                  />
+                  <Input id='lastName' placeholder='Zadran' {...register('lastName')} />
                 </div>
                 <div>
                   <Label htmlFor='personalNumber'>Personalnummer</Label>
@@ -199,19 +188,11 @@ export default function Home() {
                 </div>
                 <div>
                   <Label htmlFor='createdAt'>Erstelldatum</Label>
-                  <Input
-                    id='createdAt'
-                    placeholder='06.06.2025'
-                    {...register('createdAt')}
-                  />
+                  <Input id='createdAt' placeholder='06.06.2025' {...register('createdAt')} />
                 </div>
                 <div>
                   <Label htmlFor='validTill'>Gültig bis</Label>
-                  <Input
-                    id='validTill'
-                    placeholder='06.06.2027'
-                    {...register('validTill')}
-                  />
+                  <Input id='validTill' placeholder='06.06.2027' {...register('validTill')} />
                 </div>
                 <div className='sm:col-span-2'>
                   <Label htmlFor='note'>Note</Label>
@@ -219,96 +200,66 @@ export default function Home() {
                 </div>
                 <div>
                   <Label>Upload Photo</Label>
-                  <Input
-                    type='file'
-                    accept='image/*'
-                    onChange={(e) => onImage(e, setPhotoUrl)}
-                  />
+                  <Input type='file' accept='image/*' onChange={(e) => onImage(e, setPhotoUrl)} />
                 </div>
                 <div>
                   <Label>Signature AN</Label>
-                  <Input
-                    type='file'
-                    accept='image/*'
-                    onChange={(e) => onImage(e, setSignAnUrl)}
-                  />
+                  <Input type='file' accept='image/*' onChange={(e) => onImage(e, setSignAnUrl)} />
                 </div>
                 <div>
                   <Label>Signature AG</Label>
-                  <Input
-                    type='file'
-                    accept='image/*'
-                    onChange={(e) => onImage(e, setSignAgUrl)}
-                  />
+                  <Input type='file' accept='image/*' onChange={(e) => onImage(e, setSignAgUrl)} />
                 </div>
                 <div className='sm:col-span-2 flex gap-3 mt-2'>
                   <Button type='submit'>Update Preview</Button>
-                  <Button type='button' variant='outline' onClick={downloadPdf}>
-                    Download PDF
-                  </Button>
+                  <Button type='button' variant='outline' onClick={downloadPdf}>Download PDF</Button>
                 </div>
               </form>
-            <CardContent>
-              {/* ID card-like preview */}
-              <div
-                ref={previewRef}
-                className="w-[680px] max-w-full rounded-xl overflow-hidden border mx-auto"
-                style={{ backgroundColor: "#ffffff", color: "#000000", borderColor: "#e5e7eb" }}
-              >
+            </CardContent>
+          </Card>
+
           <Card className='backdrop-blur-xl bg-white/70 border-border/40 shadow-xl'>
             <CardHeader>
-                <div className="p-4">
+              <CardTitle>Preview</CardTitle>
             </CardHeader>
-                    <div
-                      className="h-[140px] w-[120px] overflow-hidden rounded-md border"
-                      style={{ backgroundColor: "#e5e7eb", borderColor: "#e5e7eb" }}
-                    >
-              {/* ID card-like preview */}
+            <CardContent>
               <div
                 ref={previewRef}
-                className='bg-white text-black w-[680px] max-w-full rounded-xl overflow-hidden border mx-auto'
+                className='w-[680px] max-w-full rounded-xl overflow-hidden border mx-auto'
+                style={{ backgroundColor: '#ffffff', color: '#000000', borderColor: '#e5e7eb' }}
               >
-                {/* Header with photo and logo */}
+                {/* Header with photo and pseudo logo */}
                 <div className='p-4'>
                   <div className='grid grid-cols-[120px_1fr] gap-4 items-center'>
-                    <div className='h-[140px] w-[120px] bg-neutral-200 overflow-hidden rounded-md border'>
-                        <div className="text-xs tracking-[0.3em]" style={{ color: "#6b7280" }}>M U N I C H</div>
+                    <div
+                      className='h-[140px] w-[120px] overflow-hidden rounded-md border'
+                      style={{ backgroundColor: '#e5e7eb', borderColor: '#e5e7eb' }}
+                    >
+                      {photoUrl && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          alt='photo'
-                          src={photoUrl}
-                <div className="px-4 py-2 text-2xl font-semibold" style={{ backgroundColor: "#1e40af", color: "#ffffff" }}>
-                        />
+                        <img alt='photo' src={photoUrl as string} className='h-full w-full object-cover' />
                       )}
-                <div className="px-4 py-4 grid grid-cols-[1fr_auto] gap-4 items-center" style={{ backgroundColor: "#eff6ff" }}>
+                    </div>
                     <div className='flex items-center justify-between'>
-                    <div className="flex items-center gap-2"><span style={{ color: "#374151" }}>Personalnummer:</span><strong>{watch("personalNumber")}</strong></div>
-                    <div className="flex items-center gap-2"><span style={{ color: "#374151" }}>Ausweisnummer:</span><strong>{watch("idNumber")}</strong></div>
-                          UNITED
-                        </div>
-                        <div className='text-[22px] font-semibold -mt-1'>
-                          SECURITY
-                        </div>
-                        <div className='text-xs tracking-[0.3em] text-neutral-500'>
-                          M U N I C H
-                        </div>
+                      <div className='text-right'>
+                        <div className='text-[28px] font-bold tracking-wide'>UNITED</div>
+                        <div className='text-[22px] font-semibold -mt-1'>SECURITY</div>
+                        <div className='text-xs tracking-[0.3em]' style={{ color: '#6b7280' }}>M U N I C H</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className='bg-blue-800 text-white px-4 py-2 text-2xl font-semibold'>
+
+                {/* Name bar */}
+                <div className='px-4 py-2 text-2xl font-semibold' style={{ backgroundColor: '#1e40af', color: '#ffffff' }}>
                   {fullName}
                 </div>
-                <div className='bg-blue-50 px-4 py-4 grid grid-cols-[1fr_auto] gap-4 items-center'>
+
+                {/* Quick info band */}
+                <div className='px-4 py-4 grid grid-cols-[1fr_auto] gap-4 items-center' style={{ backgroundColor: '#eff6ff' }}>
                   <div className='grid gap-1 text-[15px]'>
-                    <div className='flex items-center gap-2'>
-                      <span className='text-neutral-700'>Personalnummer:</span>
-                      <strong>{watch('personalNumber')}</strong>
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      <span className='text-neutral-700'>Ausweisnummer:</span>
-                      <strong>{watch('idNumber')}</strong>
-                    </div>
+                    <div className='flex items-center gap-2'><span style={{ color: '#374151' }}>Personalnummer:</span><strong>{watch('personalNumber')}</strong></div>
+                    <div className='flex items-center gap-2'><span style={{ color: '#374151' }}>Ausweisnummer:</span><strong>{watch('idNumber')}</strong></div>
                   </div>
                   <div className='flex flex-col items-center gap-2'>
                     {qrDataUrl && (
@@ -318,17 +269,14 @@ export default function Home() {
                   </div>
                 </div>
 
+                {/* Details section */}
                 <div className='p-4 text-[14px]'>
-                  <p className='mb-1'>
-                    Der/Die Inhaber/in ist Mitarbeiter/in der Firma:
-                  <div className="grid grid-cols-2 items-end gap-6 mt-6">
-                    <div className="pt-2 text-center text-sm" style={{ borderTop: "1px solid #e5e7eb" }}>Unterschrift AN
+                  <p className='mb-1'>Der/Die Inhaber/in ist Mitarbeiter/in der Firma:</p>
+                  <div className='font-semibold'>{watch('company')}</div>
                   <div className='grid grid-cols-[1fr_auto] gap-4'>
-                    <div className='whitespace-pre-line'>
-                      {watch('address')}
-                    </div>
+                    <div className='whitespace-pre-line'>{watch('address')}</div>
                     <div>
-                    <div className="pt-2 text-center text-sm" style={{ borderTop: "1px solid #e5e7eb" }}>Unterschrift AG
+                      <div>Tel: {watch('phone')}</div>
                       {watch('fax') && <div>Fax: {watch('fax')}</div>}
                     </div>
                   </div>
@@ -336,9 +284,9 @@ export default function Home() {
                   <div className='grid grid-cols-2 gap-x-6 mt-3'>
                     <div className='grid grid-cols-[auto_1fr] gap-x-2'>
                       <div>Bewacherregisternummer AG:</div>
-                  {watch("note") && (
-                    <p className="text-[13px] mt-4" style={{ color: "#374151" }}>{watch("note")}</p>
-                  )}
+                      <div className='font-semibold'>{watch('agNumber')}</div>
+                      <div>Bewacherregisternummer Ma:</div>
+                      <div className='font-semibold'>{watch('maNumber')}</div>
                       <div>Barcode:</div>
                       <div className='font-semibold'>{watch('barcode')}</div>
                     </div>
@@ -351,37 +299,27 @@ export default function Home() {
                   </div>
 
                   <div className='grid grid-cols-2 items-end gap-6 mt-6'>
-                    <div className='border-t pt-2 text-center text-sm'>
+                    <div className='pt-2 text-center text-sm' style={{ borderTop: '1px solid #e5e7eb' }}>
                       Unterschrift AN
                       {signAnUrl && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={signAnUrl}
-                          alt='sign an'
-                          className='h-14 -mt-10 mx-auto'
-                        />
+                        <img src={signAnUrl as string} alt='sign an' className='h-14 -mt-10 mx-auto' />
                       )}
                     </div>
-                    <div className='border-t pt-2 text-center text-sm'>
+                    <div className='pt-2 text-center text-sm' style={{ borderTop: '1px solid #e5e7eb' }}>
                       Unterschrift AG
                       {signAgUrl && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={signAgUrl}
-                          alt='sign ag'
-                          className='h-14 -mt-10 mx-auto'
-                        />
+                        <img src={signAgUrl as string} alt='sign ag' className='h-14 -mt-10 mx-auto' />
                       )}
                     </div>
                   </div>
 
                   {watch('note') && (
-                    <p className='text-[13px] text-neutral-700 mt-4'>
-                      {watch('note')}
-                    </p>
+                    <p className='text-[13px] mt-4' style={{ color: '#374151' }}>{watch('note')}</p>
                   )}
 
-                  <div className="flex items-center justify-between text-[13px] mt-3">
+                  <div className='flex items-center justify-between text-[13px] mt-3'>
                     <div>Erstelldatum: {watch('createdAt')}</div>
                     <div>Gültig bis: {watch('validTill')}</div>
                   </div>
