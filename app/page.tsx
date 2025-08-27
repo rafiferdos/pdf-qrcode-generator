@@ -19,7 +19,6 @@ const FormSchema = z.object({
   lastName: z.string().min(1),
   personalNumber: z.string().min(1),
   idNumber: z.string().min(1),
-  company: z.string().min(1),
   address: z.string().min(1),
   phone: z.string().min(1),
   fax: z.string().optional(),
@@ -52,7 +51,6 @@ export default function Home() {
       lastName: 'Zadran',
       personalNumber: '34',
       idNumber: '000150',
-      company: 'United Security Munich GmbH',
       address: 'Landsberger Str. 482\n81241 München',
       phone: '089-54319843',
       agNumber: '16495',
@@ -431,10 +429,6 @@ export default function Home() {
                 </div>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                   <div className='sm:col-span-2'>
-                    <Label htmlFor='company'>Company</Label>
-                    <Input id='company' {...register('company')} />
-                  </div>
-                  <div className='sm:col-span-2'>
                     <Label htmlFor='address'>Address</Label>
                     <Textarea id='address' rows={2} {...register('address')} />
                   </div>
@@ -592,9 +586,7 @@ export default function Home() {
                           alt='company logo'
                           className='h-12 object-contain mb-1'
                         />
-                        <div className='text-xl font-semibold'>
-                          {watch('company')}
-                        </div>
+                        {/* Company name removed; logo-only header */}
                         <div
                           className='text-xs tracking-[0.3em]'
                           style={{ color: '#6b7280' }}
@@ -642,7 +634,7 @@ export default function Home() {
                   <p className='mb-1'>
                     Der/Die Inhaber/in ist Mitarbeiter/in der Firma:
                   </p>
-                  <div className='font-semibold'>{watch('company')}</div>
+                  {/* Company name removed from details */}
                   <div className='grid grid-cols-[1fr_auto] gap-4'>
                     <div className='whitespace-pre-line'>
                       {watch('address')}
