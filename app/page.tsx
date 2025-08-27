@@ -40,7 +40,7 @@ export default function Home() {
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
   const [signAnUrl, setSignAnUrl] = useState<string | null>(null)
   const [signAgUrl, setSignAgUrl] = useState<string | null>(null)
-  const [companyLogoUrl, setCompanyLogoUrl] = useState<string | null>(null)
+  // Using static logo from public now; no state needed
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null)
   const [barcodeUrl, setBarcodeUrl] = useState<string | null>(null)
   const previewRef = useRef<HTMLDivElement>(null)
@@ -234,19 +234,20 @@ export default function Home() {
     const photoW = 34,
       photoH = 40
     const photoImg = await ensureSupported(photoUrl)
-    if (photoImg) pdf.addImage(photoImg.url, photoImg.type, pad, pad, photoW, photoH)
+    if (photoImg)
+      pdf.addImage(photoImg.url, photoImg.type, pad, pad, photoW, photoH)
     const headerX = pad + photoW + 8
     const headerWidth = W - headerX - pad
     let headerY = pad
-    const companyNameHeader = (watch('company') || '').trim()
-    const companyLogoHeader = await ensureSupported(companyLogoUrl)
-    if (companyLogoHeader) {
+  const companyNameHeader = (watch('company') || '').trim()
+    try {
+      const logoPng = await rasterizeToPng('/logo-united.svg')
       const logoWmm = Math.min(30, headerWidth)
       const logoHmm = 12
       const logoX = headerX + (headerWidth - logoWmm) / 2
-      pdf.addImage(companyLogoHeader.url, companyLogoHeader.type, logoX, headerY, logoWmm, logoHmm)
+      pdf.addImage(logoPng, 'PNG', logoX, headerY, logoWmm, logoHmm)
       headerY += logoHmm + 2
-    }
+    } catch {}
     if (companyNameHeader) {
       pdf.setFont('helvetica', 'bold')
       pdf.setFontSize(14)
@@ -434,15 +435,6 @@ export default function Home() {
                     <Input id='company' {...register('company')} />
                   </div>
                   <div className='sm:col-span-2'>
-                    <Label htmlFor='companyLogo'>Company Logo</Label>
-                    <Input
-                      id='companyLogo'
-                      type='file'
-                      accept='image/*'
-                      onChange={(e) => onImage(e, setCompanyLogoUrl)}
-                    />
-                  </div>
-                  <div className='sm:col-span-2'>
                     <Label htmlFor='address'>Address</Label>
                     <Textarea id='address' rows={2} {...register('address')} />
                   </div>
@@ -594,14 +586,12 @@ export default function Home() {
                     </div>
                     <div className='flex items-center justify-center'>
                       <div className='flex flex-col items-center text-center'>
-                        {companyLogoUrl && (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={companyLogoUrl}
-                            alt='company logo'
-                            className='h-12 object-contain mb-1'
-                          />
-                        )}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src='/logo-united.svg'
+                          alt='company logo'
+                          className='h-12 object-contain mb-1'
+                        />
                         <div className='text-xl font-semibold'>
                           {watch('company')}
                         </div>
