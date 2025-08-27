@@ -233,7 +233,8 @@ export default function Home() {
     const photoW = 34,
       photoH = 40
     const photoImg = await ensureSupported(photoUrl)
-    if (photoImg) pdf.addImage(photoImg.url, photoImg.type, pad, pad, photoW, photoH)
+    if (photoImg)
+      pdf.addImage(photoImg.url, photoImg.type, pad, pad, photoW, photoH)
     drawText('UNITED', pad + photoW + 8, pad + 10, 16, true)
     drawText('SECURITY', pad + photoW + 8, pad + 20, 14, true)
     pdf.setTextColor(...rgb('#6b7280'))
@@ -292,7 +293,7 @@ export default function Home() {
     y += 6
     drawText('Barcode:', pad, y, 9)
     drawText(watch('barcode') || '', pad + 25, y, 9, true)
-  if (barcodeUrl) pdf.addImage(barcodeUrl, 'PNG', W - pad - 40, y - 8, 40, 10)
+    if (barcodeUrl) pdf.addImage(barcodeUrl, 'PNG', W - pad - 40, y - 8, 40, 10)
 
     // Signatures
     const sigTop = H - 38
