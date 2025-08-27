@@ -62,7 +62,7 @@ export default function Home() {
       note: 'Sollten Sie diesen Ausweis finden, so bitten wir Sie ihn uns unfrei an obige Adresse zu senden.',
     },
   })
-  
+
   // Derived values from the form
   const firstName = watch('firstName')
   const lastName = watch('lastName')
@@ -71,7 +71,10 @@ export default function Home() {
   const fullName = `${(lastName || '').trim()}, ${(firstName || '').trim()}`
 
   // Image upload helper
-  const onImage = (e: React.ChangeEvent<HTMLInputElement>, setter: (url: string | null) => void) => {
+  const onImage = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setter: (url: string | null) => void
+  ) => {
     const file = e.target.files?.[0]
     if (!file) return
     const reader = new FileReader()
@@ -81,18 +84,29 @@ export default function Home() {
 
   // Generate QR when id number changes
   useEffect(() => {
-    if (!idNumberVal) { setQrDataUrl(null); return }
-    QRCode.toDataURL(idNumberVal, { width: 200, margin: 0, errorCorrectionLevel: 'M' })
+    if (!idNumberVal) {
+      setQrDataUrl(null)
+      return
+    }
+    QRCode.toDataURL(idNumberVal, {
+      width: 200,
+      margin: 0,
+      errorCorrectionLevel: 'M',
+    })
       .then((url) => setQrDataUrl(url))
       .catch(() => setQrDataUrl(null))
   }, [idNumberVal])
 
   // Generate barcode when barcode value changes
   useEffect(() => {
-    if (!barcodeVal) { setBarcodeUrl(null); return }
+    if (!barcodeVal) {
+      setBarcodeUrl(null)
+      return
+    }
     try {
       const canvas = document.createElement('canvas')
-      const format: 'EAN13' | 'CODE128' = barcodeVal.length === 13 ? 'EAN13' : 'CODE128'
+      const format: 'EAN13' | 'CODE128' =
+        barcodeVal.length === 13 ? 'EAN13' : 'CODE128'
       JsBarcode(canvas, barcodeVal, {
         format,
         displayValue: false,
@@ -115,15 +129,31 @@ export default function Home() {
     const hPx = previewRef.current?.clientHeight || 940
     const W = pxToMm(wPx)
     const H = pxToMm(hPx)
-    const pdf = new jsPDF({ orientation: W > H ? 'landscape' : 'portrait', unit: 'mm', format: [W, H] })
+    const pdf = new jsPDF({
+      orientation: W > H ? 'landscape' : 'portrait',
+      unit: 'mm',
+      format: [W, H],
+    })
 
     const rgb = (hex: string): [number, number, number] => {
       const h = hex.replace('#', '')
-      const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h
+      const full =
+        h.length === 3
+          ? h
+              .split('')
+              .map((c) => c + c)
+              .join('')
+          : h
       const n = parseInt(full, 16)
       return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
     }
-    const drawText = (text: string, x: number, y: number, size = 10, bold = false) => {
+    const drawText = (
+      text: string,
+      x: number,
+      y: number,
+      size = 10,
+      bold = false
+    ) => {
       pdf.setFont('helvetica', bold ? 'bold' : 'normal')
       pdf.setFontSize(size)
       pdf.text(text, x, y)
@@ -134,7 +164,17 @@ export default function Home() {
     const borderColor = rgb('#e5e7eb')
     pdf.setDrawColor(...borderColor)
     pdf.setFillColor(255, 255, 255)
-    const anyPdf = pdf as unknown as { roundedRect?: (x: number, y: number, w: number, h: number, rx: number, ry?: number, style?: string) => void }
+    const anyPdf = pdf as unknown as {
+      roundedRect?: (
+        x: number,
+        y: number,
+        w: number,
+        h: number,
+        rx: number,
+        ry?: number,
+        style?: string
+      ) => void
+    }
     if (typeof anyPdf.roundedRect === 'function') {
       anyPdf.roundedRect(1.5, 1.5, W - 3, H - 3, 3, 3, 'DF')
     } else {
@@ -142,8 +182,10 @@ export default function Home() {
     }
 
     // Header: photo + logotype
-    const photoW = 34, photoH = 40
-    if (photoUrl) pdf.addImage(photoUrl as string, 'PNG', pad, pad, photoW, photoH)
+    const photoW = 34,
+      photoH = 40
+    if (photoUrl)
+      pdf.addImage(photoUrl as string, 'PNG', pad, pad, photoW, photoH)
     drawText('UNITED', pad + photoW + 8, pad + 10, 16, true)
     drawText('SECURITY', pad + photoW + 8, pad + 20, 14, true)
     pdf.setTextColor(...rgb('#6b7280'))
@@ -155,7 +197,15 @@ export default function Home() {
     pdf.setFillColor(...rgb('#1e40af'))
     pdf.rect(1.5, nameBarY, W - 3, 9, 'F')
     pdf.setTextColor(255, 255, 255)
-    drawText(`${(watch('lastName') || '').trim()}, ${(watch('firstName') || '').trim()}`, pad, nameBarY + 6.5, 12, true)
+    drawText(
+      `${(watch('lastName') || '').trim()}, ${(
+        watch('firstName') || ''
+      ).trim()}`,
+      pad,
+      nameBarY + 6.5,
+      12,
+      true
+    )
     pdf.setTextColor(0, 0, 0)
 
     // Info band with QR
@@ -166,7 +216,8 @@ export default function Home() {
     drawText(watch('personalNumber') || '', pad + 30, bandY + 8, 9, true)
     drawText('Ausweisnummer:', pad, bandY + 16, 9)
     drawText(watch('idNumber') || '', pad + 30, bandY + 16, 9, true)
-    if (qrDataUrl) pdf.addImage(qrDataUrl, 'PNG', W - pad - 20, bandY + 2, 20, 20)
+    if (qrDataUrl)
+      pdf.addImage(qrDataUrl, 'PNG', W - pad - 20, bandY + 2, 20, 20)
 
     // Details block
     let y = bandY + 28
@@ -175,9 +226,13 @@ export default function Home() {
     drawText(watch('company') || '', pad, y, 10, true)
     y += 5
     const addressLines = (watch('address') || '').split('\n')
-    addressLines.forEach((line) => { drawText(line, pad, y, 9); y += 5 })
+    addressLines.forEach((line) => {
+      drawText(line, pad, y, 9)
+      y += 5
+    })
     drawText(`Tel: ${watch('phone') || ''}`, W - pad - 45, bandY + 35, 9)
-    if (watch('fax')) drawText(`Fax: ${watch('fax')}`, W - pad - 45, bandY + 40, 9)
+    if (watch('fax'))
+      drawText(`Fax: ${watch('fax')}`, W - pad - 45, bandY + 40, 9)
 
     // Registry and barcode
     y += 2
@@ -194,12 +249,33 @@ export default function Home() {
     // Signatures
     const sigTop = H - 38
     pdf.setDrawColor(...borderColor)
-    pdf.line(pad, sigTop, W/2 - pad, sigTop)
-    pdf.line(W/2 + pad, sigTop, W - pad, sigTop)
-    if (signAnUrl) pdf.addImage(signAnUrl as string, 'PNG', pad, sigTop - 16, (W/2) - 2*pad, 12)
-    if (signAgUrl) pdf.addImage(signAgUrl as string, 'PNG', W/2 + pad, sigTop - 16, (W/2) - 2*pad, 12)
-    drawText('Unterschrift AN', pad + ((W/2 - 2*pad)/2) - 16, sigTop + 6, 8)
-    drawText('Unterschrift AG', W/2 + pad + ((W/2 - 2*pad)/2) - 16, sigTop + 6, 8)
+    pdf.line(pad, sigTop, W / 2 - pad, sigTop)
+    pdf.line(W / 2 + pad, sigTop, W - pad, sigTop)
+    if (signAnUrl)
+      pdf.addImage(
+        signAnUrl as string,
+        'PNG',
+        pad,
+        sigTop - 16,
+        W / 2 - 2 * pad,
+        12
+      )
+    if (signAgUrl)
+      pdf.addImage(
+        signAgUrl as string,
+        'PNG',
+        W / 2 + pad,
+        sigTop - 16,
+        W / 2 - 2 * pad,
+        12
+      )
+    drawText('Unterschrift AN', pad + (W / 2 - 2 * pad) / 2 - 16, sigTop + 6, 8)
+    drawText(
+      'Unterschrift AG',
+      W / 2 + pad + (W / 2 - 2 * pad) / 2 - 16,
+      sigTop + 6,
+      8
+    )
 
     // Note
     const note = (watch('note') || '').trim()
@@ -207,9 +283,9 @@ export default function Home() {
       pdf.setTextColor(...rgb('#374151'))
       pdf.setFont('helvetica', 'normal')
       pdf.setFontSize(9)
-      const split = pdf.splitTextToSize(note, W - 2*pad)
+      const split = pdf.splitTextToSize(note, W - 2 * pad)
       pdf.text(split, pad, sigTop + 14)
-      pdf.setTextColor(0,0,0)
+      pdf.setTextColor(0, 0, 0)
     }
 
     // Dates footer
