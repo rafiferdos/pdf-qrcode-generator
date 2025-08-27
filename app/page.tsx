@@ -329,7 +329,7 @@ export default function Home() {
       )
 
     // Signatures - matching preview layout exactly
-    y += pxToMm(24) // mt-6
+    y += pxToMm(8) // mt-2 (reduced from mt-6 by 60%)
     const sigSectionY = y + pxToMm(64) // h-16 spacing above signature area
     const sigAreaHeight = pxToMm(80) // h-20 increased signature area
     const lineY = sigSectionY + sigAreaHeight // lines below signatures
