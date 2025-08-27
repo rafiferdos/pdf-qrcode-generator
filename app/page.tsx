@@ -314,12 +314,19 @@ export default function Home() {
     y += pxToMm(24) // space-y-1
     drawText('Barcode:', pad, y, 9)
     drawText(watch('barcode') || '', pad + pxToMm(60), y, 9, true)
-    
+
     // Barcode image on the right
     const barcodeWidth = pxToMm(160) // Estimated barcode width
     const barcodeHeight = pxToMm(40) // h-10 = 40px
-    if (barcodeUrl) 
-      pdf.addImage(barcodeUrl, 'PNG', W - pad - barcodeWidth, registryStartY + pxToMm(32), barcodeWidth, barcodeHeight)
+    if (barcodeUrl)
+      pdf.addImage(
+        barcodeUrl,
+        'PNG',
+        W - pad - barcodeWidth,
+        registryStartY + pxToMm(32),
+        barcodeWidth,
+        barcodeHeight
+      )
 
     // Signatures
     const sigTop = H - 18 // Further reduced bottom gap
