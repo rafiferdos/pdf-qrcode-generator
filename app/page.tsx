@@ -304,7 +304,7 @@ export default function Home() {
     if (barcodeUrl) pdf.addImage(barcodeUrl, 'PNG', W - pad - 40, y - 8, 40, 10)
 
     // Signatures
-    const sigTop = H - 18  // Further reduced bottom gap
+    const sigTop = H - 18 // Further reduced bottom gap
     pdf.setDrawColor(...borderColor)
     pdf.line(pad, sigTop, W / 2 - pad, sigTop)
     pdf.line(W / 2 + pad, sigTop, W - pad, sigTop)
@@ -315,7 +315,7 @@ export default function Home() {
         signAnImg.url,
         signAnImg.type,
         pad,
-        sigTop - 6,  // Much smaller space between line and signature
+        sigTop - 6, // Much smaller space between line and signature
         W / 2 - 2 * pad,
         6
       )
@@ -324,7 +324,7 @@ export default function Home() {
         signAgImg.url,
         signAgImg.type,
         W / 2 + pad,
-        sigTop - 6,  // Much smaller space between line and signature
+        sigTop - 6, // Much smaller space between line and signature
         W / 2 - 2 * pad,
         6
       )
