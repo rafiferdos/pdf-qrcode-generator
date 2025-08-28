@@ -412,10 +412,10 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-slate-300 text-sm font-medium">
-                        Strong Password Required
+                        Secure Authentication Required
                       </p>
                       <p className="text-slate-500 text-xs">
-                        Your master password: SparkTech2025!@#QR
+                        Enter your authorized master password to access the system
                       </p>
                     </div>
                   </div>
