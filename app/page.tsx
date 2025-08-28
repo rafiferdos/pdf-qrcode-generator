@@ -955,7 +955,7 @@ export default function Home() {
                                 .querySelector('input[accept="image/*"]')
                                 ?.click()
                             }
-                            className="w-full mt-6 py-4 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-semibold text-lg rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25"
+                            className="w-full mt-6 py-4 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-semibold text-lg rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25 cursor-pointer"
                           >
                             <svg
                               className="w-5 h-5 inline mr-3"
