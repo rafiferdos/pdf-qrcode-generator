@@ -105,8 +105,8 @@ export default function Home() {
     if (!previewRef.current) return;
     const pxToMm = (px: number) => (px * 25.4) / 96;
     const node = previewRef.current;
-    const wPx = node.clientWidth || 680;
-    const hPx = node.clientHeight || 940;
+    const wPx = node.offsetWidth || node.clientWidth || 680;
+    const hPx = node.offsetHeight || node.clientHeight || 940;
     // Use html-to-image for robust rendering, avoiding color parser issues
     const imgData = await toPng(node, {
       cacheBust: true,
@@ -120,7 +120,16 @@ export default function Home() {
       unit: "mm",
       format: [W, H],
     });
-    pdf.addImage(imgData, "PNG", 0, 0, W, H);
+    // Add a tiny inner margin to avoid any edge cropping due to rounding
+    const m = 0.5; // mm
+    pdf.addImage(
+      imgData,
+      "PNG",
+      m,
+      m,
+      Math.max(0, W - 2 * m),
+      Math.max(0, H - 2 * m)
+    );
     pdf.save(`id-card-${watch("idNumber") || "preview"}.pdf`);
   };
   // Removed old manual PDF drawing function in favor of snapshot approach
