@@ -305,4 +305,13 @@
   .upload-success-check {
     animation: upload-success 0.8s ease-out;
   }
+
+  /* Global Button Cursor Pointer */
+  button {
+    cursor: pointer !important;
+  }
+  
+  button:disabled {
+    cursor: not-allowed !important;
+  }
 }
