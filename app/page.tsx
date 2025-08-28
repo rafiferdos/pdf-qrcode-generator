@@ -391,7 +391,7 @@ export default function Home() {
                     </p>
                     {/* Company name removed from details */}
                     <div className="grid grid-cols-[1fr_auto] gap-4">
-                      <div className="whitespace-pre-line">
+                      <div className="whitespace-pre-line font-semibold">
                         {watch("address")}
                       </div>
                       <div>
@@ -403,27 +403,21 @@ export default function Home() {
                     <div className="grid grid-cols-2 gap-x-6">
                       <div className="space-y-1">
                         <div className="flex gap-2">
-                          <span className="whitespace-nowrap">
+                          <span className="whitespace-nowrap font-semibold">
                             Bewacherregisternummer AG:
                           </span>
-                          <span className="font-semibold">
-                            {watch("agNumber")}
-                          </span>
+                          <span>{watch("agNumber")}</span>
                         </div>
                         <div className="flex gap-2">
-                          <span className="whitespace-nowrap">
+                          <span className="whitespace-nowrap font-semibold">
                             Bewacherregisternummer Ma:
                           </span>
-                          <span className="font-semibold">
-                            {watch("maNumber")}
-                          </span>
+                          <span>{watch("maNumber")}</span>
                         </div>
                         {/* Show barcode as plain text in preview (no barcode image) */}
                         <div className="flex gap-2">
-                          <span className="whitespace-nowrap">Barcode:</span>
-                          <span className="font-semibold">
-                            {watch("barcode")}
-                          </span>
+                          <span className="whitespace-nowrap font-semibold">Barcode:</span>
+                          <span>{watch("barcode")}</span>
                         </div>
                       </div>
                       <div className="flex items-end justify-end">
