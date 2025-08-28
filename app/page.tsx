@@ -56,8 +56,8 @@ export default function Home() {
       agNumber: "",
       maNumber: "",
       barcode: "",
-  createdAt: new Date().toLocaleDateString("de-DE"),
-  validTill: "",
+      createdAt: new Date().toLocaleDateString("de-DE"),
+      validTill: "",
     },
   });
 
@@ -400,7 +400,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-x-6 mt-3">
+                    <div className="grid grid-cols-2 gap-x-6 mt-2">
                       <div className="space-y-1">
                         <div className="flex gap-2">
                           <span className="whitespace-nowrap">
@@ -421,7 +421,9 @@ export default function Home() {
                         {/* Show barcode as plain text in preview (no barcode image) */}
                         <div className="flex gap-2">
                           <span className="whitespace-nowrap">Barcode:</span>
-                          <span className="font-semibold">{watch("barcode")}</span>
+                          <span className="font-semibold">
+                            {watch("barcode")}
+                          </span>
                         </div>
                       </div>
                       <div className="flex items-end justify-end">
@@ -429,7 +431,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 items-end gap-6 mt-2">
+                    <div className="grid grid-cols-2 items-end gap-6 mt-1">
                       {/* Signature AN */}
                       <div className="text-center text-sm">
                         <div className="h-16"></div>
@@ -464,15 +466,15 @@ export default function Home() {
                       </div>
                     </div>
 
-                      {/* Bottom text under signatures, left-aligned */}
-                      <div className="mt-4 text-left">
-                        <p className="text-[13px]" style={{ color: '#374151' }}>
-                          Sollten Sie diesen Ausweis finden, so bitten wir Sie ihn
-                          uns unfrei an obige Adresse zu senden.
-                        </p>
-                      </div>
+                    {/* Bottom text under signatures, left-aligned */}
+                    <div className="mt-4 text-left">
+                      <p className="text-[13px]" style={{ color: "#374151" }}>
+                        Sollten Sie diesen Ausweis finden, so bitten wir Sie ihn
+                        uns unfrei an obige Adresse zu senden.
+                      </p>
+                    </div>
 
-                      {/* note removed from preview */}
+                    {/* note removed from preview */}
 
                     <div className="flex items-center justify-center gap-4 text-[13px] mt-3">
                       <div>Erstelldatum: {watch("createdAt")}</div>
