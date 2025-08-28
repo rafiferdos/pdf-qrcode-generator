@@ -464,7 +464,15 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {/* note removed from preview */}
+                      {/* Bottom text under signatures, left-aligned */}
+                      <div className="mt-4 text-left">
+                        <p className="text-[13px]" style={{ color: '#374151' }}>
+                          Sollten Sie diesen Ausweis finden, so bitten wir Sie ihn
+                          uns unfrei an obige Adresse zu senden.
+                        </p>
+                      </div>
+
+                      {/* note removed from preview */}
 
                     <div className="flex items-center justify-center gap-4 text-[13px] mt-3">
                       <div>Erstelldatum: {watch("createdAt")}</div>
