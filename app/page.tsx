@@ -1308,7 +1308,7 @@ export default function Home() {
                   <div className="flex gap-4 pt-6">
                     <Button
                       type="submit"
-                      className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105"
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105 cursor-pointer"
                     >
                       <svg
                         className="w-5 h-5 mr-2"
@@ -1329,7 +1329,7 @@ export default function Home() {
                       type="button"
                       variant="outline"
                       onClick={downloadPdfSnapshot}
-                      className="flex-1 border-2 border-cyan-600 text-cyan-400 hover:bg-cyan-600 hover:text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 transform hover:scale-105"
+                      className="flex-1 border-2 border-cyan-600 text-cyan-400 hover:bg-cyan-600 hover:text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 transform hover:scale-105 cursor-pointer"
                     >
                       <svg
                         className="w-5 h-5 mr-2"
