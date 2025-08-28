@@ -139,154 +139,317 @@ export default function Home() {
   // Removed old manual PDF drawing function in favor of snapshot approach
 
   return (
-    <div
-      className="min-h-dvh"
-      style={{
-        background:
-          "radial-gradient(80% 60% at 50% -20%, #fafafa 0%, rgba(250,250,250,0) 60%), linear-gradient(180deg, #ffffff, #f3f4f6)",
-      }}
-    >
-      <div className="mx-auto max-w-6xl px-4 py-10">
-        <h1 className="text-2xl font-semibold mb-6">ID Card Generator</h1>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          <Card className="backdrop-blur-xl bg-white/70 border-border/40 shadow-xl">
-            <CardHeader>
-              <CardTitle>Details</CardTitle>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 dark">
+      {/* Animated background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-spin duration-[20s]"></div>
+      </div>
+      
+      <div className="relative mx-auto max-w-7xl px-4 py-8">
+        {/* Header Section */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-2xl mb-6 shadow-2xl">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-purple-200 to-cyan-200 bg-clip-text text-transparent mb-4">
+            Professional ID Card Generator
+          </h1>
+          <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+            Create stunning professional identification cards with advanced customization and instant PDF export
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
+          {/* Enhanced Form Card */}
+          <Card className="backdrop-blur-xl bg-slate-800/50 border-slate-700/50 shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover:scale-[1.02] group">
+            <CardHeader className="bg-gradient-to-r from-purple-600/20 to-cyan-600/20 border-b border-slate-700/50">
+              <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                </div>
+                Card Details
+              </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-8">
               <form
-                className="grid grid-cols-1 gap-6"
+                className="space-y-8"
                 onSubmit={handleSubmit(onSubmit)}
               >
-                <div className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Person
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="firstName">First name</Label>
-                    <Input
-                      id="firstName"
-                      placeholder=""
-                      {...register("firstName")}
-                    />
+              <form
+                className="space-y-8"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                {/* Personal Information Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-emerald-400 uppercase tracking-wider">Personal Information</h3>
                   </div>
-                  <div>
-                    <Label htmlFor="lastName">Last name</Label>
-                    <Input
-                      id="lastName"
-                      placeholder=""
-                      {...register("lastName")}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="personalNumber">Personalnummer</Label>
-                    <Input
-                      id="personalNumber"
-                      {...register("personalNumber")}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="idNumber">Ausweisnummer</Label>
-                    <Input id="idNumber" {...register("idNumber")} />
-                  </div>
-                </div>
-
-                <div className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Company
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="sm:col-span-2">
-                    <Label htmlFor="address">Address</Label>
-                    <Textarea id="address" rows={2} {...register("address")} />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone">Tel</Label>
-                    <Input id="phone" {...register("phone")} />
-                  </div>
-                  <div>
-                    <Label htmlFor="fax">Fax</Label>
-                    <Input id="fax" {...register("fax")} />
-                  </div>
-                </div>
-
-                <div className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Registry
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="agNumber">Bewacherregisternummer AG</Label>
-                    <Input id="agNumber" {...register("agNumber")} />
-                  </div>
-                  <div>
-                    <Label htmlFor="maNumber">Bewacherregisternummer Ma</Label>
-                    <Input id="maNumber" {...register("maNumber")} />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <Label htmlFor="barcode">Barcode</Label>
-                    <Input id="barcode" {...register("barcode")} />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-3 group">
+                      <Label htmlFor="firstName" className="text-slate-300 font-medium group-hover:text-white transition-colors">First Name</Label>
+                      <div className="relative">
+                        <Input
+                          id="firstName"
+                          placeholder=""
+                          {...register("firstName")}
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3 group">
+                      <Label htmlFor="lastName" className="text-slate-300 font-medium group-hover:text-white transition-colors">Last Name</Label>
+                      <div className="relative">
+                        <Input
+                          id="lastName"
+                          placeholder=""
+                          {...register("lastName")}
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3 group">
+                      <Label htmlFor="personalNumber" className="text-slate-300 font-medium group-hover:text-white transition-colors">Personal Number</Label>
+                      <div className="relative">
+                        <Input
+                          id="personalNumber"
+                          {...register("personalNumber")}
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3 group">
+                      <Label htmlFor="idNumber" className="text-slate-300 font-medium group-hover:text-white transition-colors">ID Number</Label>
+                      <div className="relative">
+                        <Input 
+                          id="idNumber" 
+                          {...register("idNumber")} 
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Validity
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="createdAt">Erstelldatum</Label>
-                    <Input
-                      id="createdAt"
-                      placeholder=""
-                      {...register("createdAt")}
-                    />
+                {/* Company Information Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-blue-400 uppercase tracking-wider">Company Details</h3>
                   </div>
-                  <div>
-                    <Label htmlFor="validTill">Gültig bis</Label>
-                    <Input
-                      id="validTill"
-                      placeholder=""
-                      {...register("validTill")}
-                    />
-                  </div>
-                  {/* note field removed */}
-                </div>
-
-                <div className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Uploads
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <Label>Upload Photo</Label>
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => onImage(e, setPhotoUrl)}
-                    />
-                  </div>
-                  <div>
-                    <Label>Signature AN</Label>
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => onImage(e, setSignAnUrl)}
-                    />
-                  </div>
-                  <div>
-                    <Label>Signature AG</Label>
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => onImage(e, setSignAgUrl)}
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="sm:col-span-2 space-y-3 group">
+                      <Label htmlFor="address" className="text-slate-300 font-medium group-hover:text-white transition-colors">Company Address</Label>
+                      <div className="relative">
+                        <Textarea 
+                          id="address" 
+                          rows={3} 
+                          {...register("address")} 
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500 resize-none"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3 group">
+                      <Label htmlFor="phone" className="text-slate-300 font-medium group-hover:text-white transition-colors">Phone</Label>
+                      <div className="relative">
+                        <Input 
+                          id="phone" 
+                          {...register("phone")} 
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3 group">
+                      <Label htmlFor="fax" className="text-slate-300 font-medium group-hover:text-white transition-colors">Fax (Optional)</Label>
+                      <div className="relative">
+                        <Input 
+                          id="fax" 
+                          {...register("fax")} 
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex gap-3 mt-2">
-                  <Button type="submit">Update Preview</Button>
+                </div>
+
+                {/* Registry Information Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-6 h-6 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-amber-400 uppercase tracking-wider">Registry Information</h3>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-3 group">
+                      <Label htmlFor="agNumber" className="text-slate-300 font-medium group-hover:text-white transition-colors">Registry Number AG</Label>
+                      <div className="relative">
+                        <Input 
+                          id="agNumber" 
+                          {...register("agNumber")} 
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3 group">
+                      <Label htmlFor="maNumber" className="text-slate-300 font-medium group-hover:text-white transition-colors">Registry Number Ma</Label>
+                      <div className="relative">
+                        <Input 
+                          id="maNumber" 
+                          {...register("maNumber")} 
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                    <div className="sm:col-span-2 space-y-3 group">
+                      <Label htmlFor="barcode" className="text-slate-300 font-medium group-hover:text-white transition-colors">Barcode</Label>
+                      <div className="relative">
+                        <Input 
+                          id="barcode" 
+                          {...register("barcode")} 
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Validity Information Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 8l6-6m0 0l6 6M6 10l6 6" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-rose-400 uppercase tracking-wider">Validity Period</h3>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-3 group">
+                      <Label htmlFor="createdAt" className="text-slate-300 font-medium group-hover:text-white transition-colors">Issue Date</Label>
+                      <div className="relative">
+                        <Input
+                          id="createdAt"
+                          placeholder=""
+                          {...register("createdAt")}
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3 group">
+                      <Label htmlFor="validTill" className="text-slate-300 font-medium group-hover:text-white transition-colors">Expiry Date</Label>
+                      <div className="relative">
+                        <Input
+                          id="validTill"
+                          placeholder=""
+                          {...register("validTill")}
+                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* File Upload Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-6 h-6 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-violet-400 uppercase tracking-wider">Upload Assets</h3>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="space-y-3 group">
+                      <Label className="text-slate-300 font-medium group-hover:text-white transition-colors">Profile Photo</Label>
+                      <div className="relative">
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => onImage(e, setPhotoUrl)}
+                          className="bg-slate-900/50 border-slate-600 text-white file:bg-purple-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 file:font-medium hover:file:bg-purple-700 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3 group">
+                      <Label className="text-slate-300 font-medium group-hover:text-white transition-colors">Signature AN</Label>
+                      <div className="relative">
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => onImage(e, setSignAnUrl)}
+                          className="bg-slate-900/50 border-slate-600 text-white file:bg-cyan-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 file:font-medium hover:file:bg-cyan-700 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3 group">
+                      <Label className="text-slate-300 font-medium group-hover:text-white transition-colors">Signature AG</Label>
+                      <div className="relative">
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => onImage(e, setSignAgUrl)}
+                          className="bg-slate-900/50 border-slate-600 text-white file:bg-emerald-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 file:font-medium hover:file:bg-emerald-700 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-4 pt-6">
+                  <Button 
+                    type="submit" 
+                    className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Update Preview
+                  </Button>
                   <Button
                     type="button"
                     variant="outline"
                     onClick={downloadPdfSnapshot}
+                    className="flex-1 border-2 border-cyan-600 text-cyan-400 hover:bg-cyan-600 hover:text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 transform hover:scale-105"
                   >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
                     Download PDF
                   </Button>
                 </div>
