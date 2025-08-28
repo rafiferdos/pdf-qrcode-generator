@@ -427,11 +427,11 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 items-end gap-6">
+                    <div className="grid grid-cols-2 items-end gap-6 mt-1">
                       {/* Signature AN */}
                       <div className="text-center text-sm">
-                        <div className="h-16"></div>
-                        <div className="h-20 flex items-center justify-center py-2">
+                        <div className="h-6"></div>
+                        <div className="h-12 flex items-center justify-center py-1">
                           {signAnUrl && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
@@ -446,8 +446,8 @@ export default function Home() {
                       </div>
                       {/* Signature AG */}
                       <div className="text-center text-sm">
-                        <div className="h-16"></div>
-                        <div className="h-20 flex items-center justify-center py-2">
+                        <div className="h-6"></div>
+                        <div className="h-12 flex items-center justify-center py-1">
                           {signAgUrl && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
