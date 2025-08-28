@@ -360,7 +360,7 @@ export default function Home() {
                   {/* Name bar */}
                   <div
                     className="px-4 py-2 text-2xl font-semibold"
-                    style={{ backgroundColor: "#1e40af", color: "#ffffff" }}
+                    style={{ backgroundColor: "#153e70", color: "#ffffff" }}
                   >
                     {fullName}
                   </div>
