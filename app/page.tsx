@@ -412,29 +412,17 @@ export default function Home() {
                     <div className="grid grid-cols-2 gap-x-6">
                       <div className="space-y-1">
                         <div className="flex gap-2">
-                          <strong className="whitespace-nowrap">
-                            Bewacherregisternummer AG:
-                          </strong>
-                          <span className="font-normal">
-                            {watch("agNumber")}
-                          </span>
+                            <p className="whitespace-nowrap">Bewacherregisternummer AG:</p>
+                          <span className="font-bold">{watch("agNumber")}</span>
                         </div>
                         <div className="flex gap-2">
-                          <strong className="whitespace-nowrap">
-                            Bewacherregisternummer Ma:
-                          </strong>
-                          <span className="font-normal">
-                            {watch("maNumber")}
-                          </span>
+                            <p className="whitespace-nowrap">Bewacherregisternummer Ma:</p>
+                          <span className="font-bold">{watch("maNumber")}</span>
                         </div>
                         {/* Show barcode as plain text in preview (no barcode image) */}
                         <div className="flex gap-2">
-                          <strong className="whitespace-nowrap">
-                            Barcode:
-                          </strong>
-                          <span className="font-normal">
-                            {watch("barcode")}
-                          </span>
+                            <p className="whitespace-nowrap">Barcode:</p>
+                          <span className="font-bold">{watch("barcode")}</span>
                         </div>
                       </div>
                       <div className="flex items-end justify-end">
