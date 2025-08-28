@@ -385,12 +385,7 @@ export default function Home() {
                     <div className="flex flex-col items-center gap-2">
                       {qrDataUrl && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={qrDataUrl}
-                          alt="qr"
-                          className="h-20 w-20"
-                          style={{ transform: "translateX(6px)" }}
-                        />
+                        <img src={qrDataUrl} alt="qr" className="h-20 w-20" />
                       )}
                     </div>
                   </div>
@@ -417,16 +412,20 @@ export default function Home() {
                     <div className="grid grid-cols-2 gap-x-6">
                       <div className="space-y-1">
                         <div className="flex gap-2">
-                            <p className="whitespace-nowrap">Bewacherregisternummer AG:</p>
+                          <p className="whitespace-nowrap">
+                            Bewacherregisternummer AG:
+                          </p>
                           <span className="font-bold">{watch("agNumber")}</span>
                         </div>
                         <div className="flex gap-2">
-                            <p className="whitespace-nowrap">Bewacherregisternummer Ma:</p>
+                          <p className="whitespace-nowrap">
+                            Bewacherregisternummer Ma:
+                          </p>
                           <span className="font-bold">{watch("maNumber")}</span>
                         </div>
                         {/* Show barcode as plain text in preview (no barcode image) */}
                         <div className="flex gap-2">
-                            <p className="whitespace-nowrap">Barcode:</p>
+                          <p className="whitespace-nowrap">Barcode:</p>
                           <span className="font-bold">{watch("barcode")}</span>
                         </div>
                       </div>
