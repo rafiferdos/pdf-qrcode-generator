@@ -91,6 +91,10 @@ export default function Home() {
       width: 200,
       margin: 0,
       errorCorrectionLevel: "M",
+      color: {
+        dark: "#000000",
+        light: "#00000000"
+      }
     })
       .then((url) => setQrDataUrl(url))
       .catch(() => setQrDataUrl(null));
@@ -382,7 +386,7 @@ export default function Home() {
                         <strong>{watch("idNumber")}</strong>
                       </div>
                     </div>
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-2" style={{ backgroundColor: "#b6e6f2" }}>
                       {qrDataUrl && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={qrDataUrl} alt="qr" className="h-20 w-20" />
