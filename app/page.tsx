@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Textarea } from "@/components/ui/textarea";
+import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 import QRCode from "qrcode";
 // JsBarcode removed: barcode will remain in the form but won't be rendered in preview or PDF
@@ -100,61 +101,19 @@ export default function Home() {
 
   // No-op submit to keep the Update Preview button semantic; watch() already updates live
   const onSubmit = () => {};
-  const downloadPdf = async () => {
-    // Programmatic jsPDF drawing (no html2canvas) to avoid color parsing errors
-    type ImgType = "PNG" | "JPEG" | "WEBP";
-    const getMimeFromDataUrl = (url: string | null): string | null => {
-      if (!url) return null;
-      const m = url.match(/^data:([^;]+);base64,/i);
-      return m?.[1] || null;
-    };
-    const getJsPdfType = (mime: string | null): ImgType | null => {
-      if (!mime) return null;
-      const m = mime.toLowerCase();
-      if (m === "image/png") return "PNG";
-      if (m === "image/jpeg" || m === "image/jpg") return "JPEG";
-      if (m === "image/webp") return "WEBP";
-      return null;
-    };
-    const rasterizeToPng = (url: string): Promise<string> =>
-      new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.naturalWidth || img.width;
-          canvas.height = img.naturalHeight || img.height;
-          const ctx = canvas.getContext("2d");
-          if (!ctx) return reject(new Error("Canvas 2D context not available"));
-          ctx.drawImage(img, 0, 0);
-          try {
-            resolve(canvas.toDataURL("image/png"));
-          } catch (e) {
-            reject(e);
-          }
-        };
-        img.onerror = () => reject(new Error("Image load failed"));
-        img.src = url;
-      });
-    const ensureSupported = async (
-      url: string | null
-    ): Promise<{ url: string; type: ImgType } | null> => {
-      if (!url) return null;
-      const mime = getMimeFromDataUrl(url);
-      const t = getJsPdfType(mime);
-      if (t === "PNG" || t === "JPEG") return { url, type: t };
-      // Convert WEBP or unknown to PNG
-      try {
-        const png = await rasterizeToPng(url);
-        return { url: png, type: "PNG" };
-      } catch {
-        return null;
-      }
-    };
+  // New: Snapshot the preview DOM to an image and embed it into a single-page PDF
+  const downloadPdfSnapshot = async () => {
+    if (!previewRef.current) return;
     const pxToMm = (px: number) => (px * 25.4) / 96;
-    // Get the outer container dimensions (including p-3 padding)
-    const outerContainer = previewRef.current;
-    const wPx = outerContainer?.clientWidth || 680; // Full container width
-    const hPx = outerContainer?.clientHeight || 940; // Full container height
+    const node = previewRef.current;
+    const wPx = node.clientWidth || 680;
+    const hPx = node.clientHeight || 940;
+    // Use html-to-image for robust rendering, avoiding color parser issues
+    const imgData = await toPng(node, {
+      cacheBust: true,
+      pixelRatio: 2,
+      backgroundColor: "#f3f4f6",
+    });
     const W = pxToMm(wPx);
     const H = pxToMm(hPx);
     const pdf = new jsPDF({
@@ -162,236 +121,10 @@ export default function Home() {
       unit: "mm",
       format: [W, H],
     });
-
-    const rgb = (hex: string): [number, number, number] => {
-      const h = hex.replace("#", "");
-      const full =
-        h.length === 3
-          ? h
-              .split("")
-              .map((c) => c + c)
-              .join("")
-          : h;
-      const n = parseInt(full, 16);
-      return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-    };
-    const drawText = (
-      text: string,
-      x: number,
-      y: number,
-      size = 10,
-      bold = false
-    ) => {
-      pdf.setFont("helvetica", bold ? "bold" : "normal");
-      pdf.setFontSize(size);
-      pdf.text(text, x, y);
-    };
-
-    // Background with overall p-3 padding
-    const outerPad = pxToMm(12); // p-3 = 12px padding
-    const pad = pxToMm(16); // Exact conversion of p-4 (16px) to mm for inner content
-    const borderColor = rgb("#e5e7eb");
-
-    // Gray background (matching preview bg-gray-400)
-    pdf.setFillColor(...rgb("#f3f4f6"));
-    pdf.rect(0, 0, W, H, "F");
-
-    // White card background with rounded corners
-    pdf.setDrawColor(...borderColor);
-    pdf.setFillColor(255, 255, 255);
-    const cardX = outerPad;
-    const cardY = outerPad;
-    const cardW = W - 2 * outerPad;
-    const cardH = H - 2 * outerPad;
-    pdf.rect(cardX, cardY, cardW, cardH, "DF");
-
-    // Header: photo (left) + company logo and name (right)
-    const photoW = pxToMm(120), // Exact match to w-[120px]
-      photoH = pxToMm(140); // Exact match to h-[140px]
-    const photoImg = await ensureSupported(photoUrl);
-    if (photoImg)
-      pdf.addImage(photoImg.url, photoImg.type, pad, pad, photoW, photoH);
-    const headerX = pad + photoW + pxToMm(16); // gap-4 = 16px
-    const headerWidth = W - headerX - pad;
-    let headerY = pad;
-    try {
-      const logoPng = await rasterizeToPng("/logo-united.png");
-      const logoWmm = Math.min(80, headerWidth); // Reduced from 119 to 80
-      const logoHmm = 32; // Reduced from 48 to 32
-      const logoX = headerX + (headerWidth - logoWmm) / 2;
-      pdf.addImage(logoPng, "PNG", logoX, headerY, logoWmm, logoHmm);
-      headerY += logoHmm + 2;
-    } catch {}
-    // company name and city text removed from header
-
-    // Name bar
-    const nameBarY = pad + photoH + pxToMm(16); // Add gap between photo section and name section
-    const nameBarHeight = pxToMm(48); // py-2 + text-2xl ≈ 48px total height
-    pdf.setFillColor(...rgb("#1e40af"));
-    pdf.rect(pad, nameBarY, W - 2 * pad, nameBarHeight, "F"); // Apply padding
-    pdf.setTextColor(255, 255, 255);
-    drawText(
-      `${(watch("lastName") || "").trim()}, ${(
-        watch("firstName") || ""
-      ).trim()}`,
-      pad * 2, // Double padding for text inside
-      nameBarY + nameBarHeight * 0.7, // Vertically center the text
-      12,
-      true
-    );
-    pdf.setTextColor(0, 0, 0);
-
-    // Info band with QR
-    const bandY = nameBarY + nameBarHeight;
-    const bandHeight = pxToMm(100); // Increased from 80 to 100 for better QR accommodation
-    pdf.setFillColor(...rgb("#bfdbfe")); // Matching the preview color
-    pdf.rect(pad, bandY, W - 2 * pad, bandHeight, "F"); // Apply padding
-    const textY1 = bandY + pxToMm(20);
-    const textY2 = bandY + pxToMm(40);
-    drawText("Personalnummer:", pad * 2, textY1, 9); // Double padding for text inside
-    drawText(
-      watch("personalNumber") || "",
-      pad * 2 + pxToMm(100),
-      textY1,
-      9,
-      true
-    );
-    drawText("Ausweisnummer:", pad * 2, textY2, 9);
-    drawText(watch("idNumber") || "", pad * 2 + pxToMm(100), textY2, 9, true);
-    const qrSize = pxToMm(80); // h-20 w-20 = 80px
-    if (qrDataUrl)
-      pdf.addImage(
-        qrDataUrl,
-        "PNG",
-        W - pad * 2 - qrSize, // Account for both outer and inner padding
-        bandY + pxToMm(10), // Better centering in taller section
-        qrSize,
-        qrSize
-      );
-
-    // Gray separator section (matching preview)
-    const separatorY = bandY + bandHeight;
-    const separatorHeight = pxToMm(16); // h-4 = 16px
-    pdf.setFillColor(...rgb("#f3f4f6")); // bg-gray-100
-    pdf.rect(pad, separatorY, W - 2 * pad, separatorHeight, "F"); // Apply padding
-
-    // Details block - with separator line
-    let y = separatorY + separatorHeight + pxToMm(16); // p-4 top padding
-    // Add separator line (border-t)
-    pdf.setDrawColor(...rgb("#e5e7eb"));
-    pdf.line(
-      pad,
-      separatorY + separatorHeight,
-      W - pad,
-      separatorY + separatorHeight
-    );
-
-    drawText("Der/Die Inhaber/in ist Mitarbeiter/in der Firma:", pad, y, 9);
-    y += pxToMm(24); // mb-1 + spacing
-    const addressLines = (watch("address") || "").split("\n");
-    addressLines.forEach((line) => {
-      drawText(line, pad, y, 9);
-      y += pxToMm(20); // line height
-    });
-    // Tel/Fax on the right side
-    const rightColX = W - pad - pxToMm(120);
-    let rightY = y - pxToMm(20 * addressLines.length) + pxToMm(20);
-    drawText(`Tel: ${watch("phone") || ""}`, rightColX, rightY, 9);
-    if (watch("fax")) {
-      rightY += pxToMm(20);
-      drawText(`Fax: ${watch("fax")}`, rightColX, rightY, 9);
-    }
-
-    // Registry and barcode - matching preview spacing
-    y += pxToMm(12); // mt-3
-    const registryStartY = y;
-    drawText("Bewacherregisternummer AG:", pad, y, 9);
-    drawText(watch("agNumber") || "", pad + pxToMm(160), y, 9, true);
-    y += pxToMm(24); // space-y-1
-    drawText("Bewacherregisternummer Ma:", pad, y, 9);
-    drawText(watch("maNumber") || "", pad + pxToMm(160), y, 9, true);
-    y += pxToMm(24); // space-y-1
-    // Barcode intentionally excluded from PDF output; only the form holds the value.
-    // Add extra spacing to keep original layout spacing
-    y += pxToMm(40);
-
-    // Signatures - matching preview layout exactly
-    y += pxToMm(8); // mt-2 (reduced from mt-6 by 60%)
-    const sigSectionY = y + pxToMm(64); // h-16 spacing above signature area
-    const sigAreaHeight = pxToMm(80); // h-20 increased signature area
-    const lineY = sigSectionY + sigAreaHeight; // lines below signatures
-
-    const signAnImg = await ensureSupported(signAnUrl);
-    const signAgImg = await ensureSupported(signAgUrl);
-
-    // Draw signatures ABOVE the lines
-    if (signAnImg)
-      pdf.addImage(
-        signAnImg.url,
-        signAnImg.type,
-        pad,
-        sigSectionY + pxToMm(8), // py-2
-        W / 2 - pxToMm(24), // account for gap
-        sigAreaHeight - pxToMm(16) // minus py-2 top/bottom
-      );
-    if (signAgImg)
-      pdf.addImage(
-        signAgImg.url,
-        signAgImg.type,
-        W / 2 + pxToMm(12),
-        sigSectionY + pxToMm(8),
-        W / 2 - pxToMm(24),
-        sigAreaHeight - pxToMm(16)
-      );
-
-    // Draw lines BELOW signatures
-    pdf.setDrawColor(...rgb("#e5e7eb"));
-    pdf.line(pad, lineY, W / 2 - pxToMm(12), lineY); // gap-6/2
-    pdf.line(W / 2 + pxToMm(12), lineY, W - pad, lineY);
-
-    // Signature labels below lines
-    const labelY = lineY + pxToMm(12);
-    drawText(
-      "Unterschrift AN",
-      pad + (W / 2 - pxToMm(24)) / 2 - pxToMm(30),
-      labelY,
-      8
-    );
-    drawText(
-      "Unterschrift AG",
-      W / 2 + pxToMm(12) + (W / 2 - pxToMm(24)) / 2 - pxToMm(30),
-      labelY,
-      8
-    );
-
-    // Note - matching preview mt-4
-    const note = (watch("note") || "").trim();
-    let noteY = labelY + pxToMm(16); // mt-4
-    if (note) {
-      pdf.setTextColor(...rgb("#374151"));
-      pdf.setFont("helvetica", "normal");
-      pdf.setFontSize(9);
-      const split = pdf.splitTextToSize(note, W - 2 * pad);
-      pdf.text(split, pad, noteY);
-      pdf.setTextColor(0, 0, 0);
-      noteY += pxToMm(split.length * 12); // Adjust for note height
-    }
-
-    // Dates footer - matching preview mt-3 and centered
-    const datesY = noteY + pxToMm(12); // mt-3
-    pdf.setFontSize(9);
-    const leftText = `Erstelldatum: ${watch("createdAt") || ""}`;
-    const rightText = `Gültig bis: ${watch("validTill") || ""}`;
-    const leftWidth = pdf.getTextWidth(leftText);
-    const rightWidth = pdf.getTextWidth(rightText);
-    const gapWidth = pxToMm(16); // gap-4
-    const totalWidth = leftWidth + rightWidth + gapWidth;
-    const startX = (W - totalWidth) / 2;
-    drawText(leftText, startX, datesY, 9);
-    drawText(rightText, startX + leftWidth + gapWidth, datesY, 9);
-
+    pdf.addImage(imgData, "PNG", 0, 0, W, H);
     pdf.save(`id-card-${watch("idNumber") || "preview"}.pdf`);
   };
+  // Removed old manual PDF drawing function in favor of snapshot approach
 
   return (
     <div
@@ -540,7 +273,11 @@ export default function Home() {
 
                 <div className="flex gap-3 mt-2">
                   <Button type="submit">Update Preview</Button>
-                  <Button type="button" variant="outline" onClick={downloadPdf}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={downloadPdfSnapshot}
+                  >
                     Download PDF
                   </Button>
                 </div>
