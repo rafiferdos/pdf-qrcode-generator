@@ -350,7 +350,7 @@ export default function Home() {
                   <Button
                     type="submit"
                     disabled={isLoading || !password.trim()}
-                    className={`w-full py-4 text-lg font-semibold rounded-xl transition-all duration-300 transform ${
+                    className={`w-full py-4 text-lg font-semibold rounded-xl transition-all duration-300 transform cursor-pointer ${
                       isLoading ? "scale-95" : "hover:scale-105"
                     } ${
                       animationState === "checking"
@@ -360,7 +360,7 @@ export default function Home() {
                         : animationState === "error"
                         ? "bg-gradient-to-r from-red-600 to-red-700"
                         : "bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700"
-                    } shadow-lg`}
+                    } shadow-lg disabled:cursor-not-allowed`}
                   >
                     {isLoading ? (
                       <div className="flex items-center justify-center space-x-2">
@@ -437,7 +437,7 @@ export default function Home() {
                 setAnimationState("idle");
               }}
               variant="outline"
-              className="bg-slate-800/50 border-slate-600 text-slate-300 hover:bg-red-600 hover:text-white hover:border-red-500 transition-all duration-300"
+              className="bg-slate-800/50 border-slate-600 text-slate-300 hover:bg-red-600 hover:text-white hover:border-red-500 transition-all duration-300 cursor-pointer"
             >
               <svg
                 className="w-4 h-4 mr-2"
