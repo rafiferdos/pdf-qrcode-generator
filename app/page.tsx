@@ -358,12 +358,12 @@ export default function Home() {
                   </div>
 
                   {/* Name bar */}
-                    <div
+                  <div
                     className="px-4 py-2 text-2xl font-semibold"
                     style={{ backgroundColor: "#1e40af", color: "#ffffff" }}
-                    >
+                  >
                     {fullName}
-                    </div>
+                  </div>
 
                   {/* Quick info band */}
                   <div
@@ -412,23 +412,29 @@ export default function Home() {
                     <div className="grid grid-cols-2 gap-x-6">
                       <div className="space-y-1">
                         <div className="flex gap-2">
-                          <span className="whitespace-nowrap font-semibold">
+                          <strong className="whitespace-nowrap">
                             Bewacherregisternummer AG:
+                          </strong>
+                          <span className="font-normal">
+                            {watch("agNumber")}
                           </span>
-                          <span>{watch("agNumber")}</span>
                         </div>
                         <div className="flex gap-2">
-                          <span className="whitespace-nowrap font-semibold">
+                          <strong className="whitespace-nowrap">
                             Bewacherregisternummer Ma:
+                          </strong>
+                          <span className="font-normal">
+                            {watch("maNumber")}
                           </span>
-                          <span>{watch("maNumber")}</span>
                         </div>
                         {/* Show barcode as plain text in preview (no barcode image) */}
                         <div className="flex gap-2">
-                          <span className="whitespace-nowrap font-semibold">
+                          <strong className="whitespace-nowrap">
                             Barcode:
+                          </strong>
+                          <span className="font-normal">
+                            {watch("barcode")}
                           </span>
-                          <span>{watch("barcode")}</span>
                         </div>
                       </div>
                       <div className="flex items-end justify-end">
