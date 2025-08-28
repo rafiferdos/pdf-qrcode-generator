@@ -56,7 +56,7 @@ export default function Home() {
       agNumber: "",
       maNumber: "",
       barcode: "",
-      createdAt: new Date().toLocaleDateString("de-DE"),
+      createdAt: "",
       validTill: "",
     },
   });
@@ -162,7 +162,7 @@ export default function Home() {
                     <Label htmlFor="firstName">First name</Label>
                     <Input
                       id="firstName"
-                      placeholder="Jawid"
+                      placeholder=""
                       {...register("firstName")}
                     />
                   </div>
@@ -170,7 +170,7 @@ export default function Home() {
                     <Label htmlFor="lastName">Last name</Label>
                     <Input
                       id="lastName"
-                      placeholder="Zadran"
+                      placeholder=""
                       {...register("lastName")}
                     />
                   </div>
@@ -231,7 +231,7 @@ export default function Home() {
                     <Label htmlFor="createdAt">Erstelldatum</Label>
                     <Input
                       id="createdAt"
-                      placeholder="06.06.2025"
+                      placeholder=""
                       {...register("createdAt")}
                     />
                   </div>
@@ -239,7 +239,7 @@ export default function Home() {
                     <Label htmlFor="validTill">Gültig bis</Label>
                     <Input
                       id="validTill"
-                      placeholder="06.06.2027"
+                      placeholder=""
                       {...register("validTill")}
                     />
                   </div>
@@ -434,7 +434,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 items-end gap-6 mt-1">
+                    <div className="grid grid-cols-2 items-end gap-6 mt-0">
                       {/* Signature AN */}
                       <div className="text-center text-sm">
                         <div className="h-4"></div>
