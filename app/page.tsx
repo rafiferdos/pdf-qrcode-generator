@@ -385,7 +385,12 @@ export default function Home() {
                     <div className="flex flex-col items-center gap-2">
                       {qrDataUrl && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={qrDataUrl} alt="qr" className="h-20 w-20" />
+                        <img
+                          src={qrDataUrl}
+                          alt="qr"
+                          className="h-20 w-20"
+                          style={{ marginLeft: "60px" }}
+                        />
                       )}
                     </div>
                   </div>
