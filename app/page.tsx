@@ -4,10 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Image from "next/image";
 
 import { Textarea } from "@/components/ui/textarea";
 import { toPng } from "html-to-image";
@@ -954,8 +954,9 @@ export default function Home() {
                           {/* Enhanced Upload Button */}
                           <button
                             onClick={() => {
-                              const input = document
-                                .querySelector('input[accept="image/*"]') as HTMLInputElement;
+                              const input = document.querySelector(
+                                'input[accept="image/*"]'
+                              ) as HTMLInputElement;
                               input?.click();
                             }}
                             className="w-full mt-6 py-4 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-semibold text-lg rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25 cursor-pointer"
@@ -1076,8 +1077,9 @@ export default function Home() {
                           {/* Enhanced Upload Button */}
                           <button
                             onClick={() => {
-                              const input = document
-                                .querySelectorAll('input[accept="image/*"]')[1] as HTMLInputElement;
+                              const input = document.querySelectorAll(
+                                'input[accept="image/*"]'
+                              )[1] as HTMLInputElement;
                               input?.click();
                             }}
                             className="w-full mt-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25 cursor-pointer"
@@ -1198,8 +1200,9 @@ export default function Home() {
                           {/* Enhanced Upload Button */}
                           <button
                             onClick={() => {
-                              const input = document
-                                .querySelectorAll('input[accept="image/*"]')[2] as HTMLInputElement;
+                              const input = document.querySelectorAll(
+                                'input[accept="image/*"]'
+                              )[2] as HTMLInputElement;
                               input?.click();
                             }}
                             className="w-full mt-4 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-emerald-500/25 cursor-pointer"
