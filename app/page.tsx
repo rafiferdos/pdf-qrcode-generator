@@ -93,8 +93,8 @@ export default function Home() {
       errorCorrectionLevel: "M",
       color: {
         dark: "#000000",
-        light: "#00000000"
-      }
+        light: "#00000000",
+      },
     })
       .then((url) => setQrDataUrl(url))
       .catch(() => setQrDataUrl(null));
@@ -386,20 +386,23 @@ export default function Home() {
                         <strong>{watch("idNumber")}</strong>
                       </div>
                     </div>
-                    <div className="flex flex-col items-center gap-2 p-2 rounded" style={{ backgroundColor: "#b6e6f2" }}>
+                    <div
+                      className="flex flex-col items-center gap-2 p-2 rounded"
+                      style={{ backgroundColor: "#b6e6f2" }}
+                    >
                       {qrDataUrl && (
-                        <div 
+                        <div
                           className="h-20 w-20 flex items-center justify-center"
                           style={{ backgroundColor: "#b6e6f2" }}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img 
-                            src={qrDataUrl} 
-                            alt="qr" 
-                            className="h-20 w-20" 
-                            style={{ 
+                          <img
+                            src={qrDataUrl}
+                            alt="qr"
+                            className="h-20 w-20"
+                            style={{
                               mixBlendMode: "multiply",
-                              filter: "contrast(1.2)"
+                              filter: "contrast(1.2)",
                             }}
                           />
                         </div>
