@@ -814,43 +814,70 @@ export default function Home() {
                     <div className="relative">
                       <div className="flex items-center gap-4 mb-8">
                         <div className="relative">
-                          <div className="w-10 h-10 bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg shadow-violet-500/25 animate-pulse">
-                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                          <div className="w-12 h-12 bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg shadow-violet-500/25 animate-pulse">
+                            <svg
+                              className="w-6 h-6 text-white"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                              />
                             </svg>
                           </div>
                           <div className="absolute -inset-1 bg-gradient-to-r from-violet-600 to-pink-600 rounded-2xl blur opacity-30 animate-pulse"></div>
                         </div>
                         <div>
-                          <h3 className="text-2xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent uppercase tracking-wider">
+                          <h3 className="text-3xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent uppercase tracking-wider">
                             Upload Assets
                           </h3>
-                          <p className="text-slate-400 text-sm mt-1">Drag & drop or click to upload professional assets</p>
+                          <p className="text-slate-400 text-lg mt-1">
+                            Drag & drop or click to upload professional assets
+                          </p>
                         </div>
                       </div>
-                      
+
                       {/* Animated Background Decoration */}
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-violet-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse"></div>
+                      <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-violet-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse"></div>
                     </div>
 
-                    {/* Premium Upload Cards Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                      
+                    {/* Professional Sequential Upload Cards */}
+                    <div className="max-w-2xl mx-auto space-y-8">
                       {/* Profile Photo Upload Card */}
                       <div className="group relative">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-violet-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                        <div className="relative bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 group-hover:scale-105">
-                          
+                        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-violet-600 to-purple-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                        <div className="relative bg-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 group-hover:scale-[1.02]">
                           {/* Card Header */}
-                          <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-violet-500 rounded-lg flex items-center justify-center">
-                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                          <div className="flex items-center gap-4 mb-6">
+                            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-violet-500 rounded-xl flex items-center justify-center shadow-lg">
+                              <svg
+                                className="w-6 h-6 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                />
                               </svg>
                             </div>
-                            <h4 className="text-lg font-bold text-purple-300">Profile Photo</h4>
+                            <div>
+                              <h4 className="text-2xl font-bold text-purple-300">
+                                Profile Photo
+                              </h4>
+                              <p className="text-slate-400">
+                                Upload your professional profile image
+                              </p>
+                            </div>
                           </div>
-                          
+
                           {/* Upload Area */}
                           <div className="relative">
                             <Input
@@ -859,45 +886,91 @@ export default function Home() {
                               onChange={(e) => onImage(e, setPhotoUrl)}
                               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                             />
-                            <div className={`border-2 border-dashed border-purple-500/50 rounded-xl p-8 text-center transition-all duration-300 hover:border-purple-400 hover:bg-purple-500/5 ${photoUrl ? 'border-green-500/50 bg-green-500/10' : ''}`}>
+                            <div
+                              className={`border-2 border-dashed border-purple-500/50 rounded-2xl p-12 text-center transition-all duration-300 hover:border-purple-400 hover:bg-purple-500/5 ${
+                                photoUrl
+                                  ? "border-green-500/50 bg-green-500/10"
+                                  : ""
+                              }`}
+                            >
                               {photoUrl ? (
-                                <div className="space-y-3">
-                                  <div className="w-20 h-20 mx-auto rounded-xl overflow-hidden border-2 border-green-500/50 shadow-lg">
-                                    <img src={photoUrl} alt="Profile Preview" className="w-full h-full object-cover" />
+                                <div className="space-y-4">
+                                  <div className="w-32 h-32 mx-auto rounded-2xl overflow-hidden border-4 border-green-500/50 shadow-2xl">
+                                    <img
+                                      src={photoUrl}
+                                      alt="Profile Preview"
+                                      className="w-full h-full object-cover"
+                                    />
                                   </div>
-                                  <p className="text-green-400 font-medium">✓ Photo Uploaded</p>
-                                  <button 
-                                    onClick={(e) => {e.preventDefault(); setPhotoUrl(null);}}
-                                    className="text-xs text-slate-400 hover:text-red-400 transition-colors"
-                                  >
-                                    Remove & upload new
-                                  </button>
+                                  <div>
+                                    <p className="text-green-400 font-semibold text-lg">
+                                      ✓ Profile Photo Uploaded Successfully
+                                    </p>
+                                    <button
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        setPhotoUrl(null);
+                                      }}
+                                      className="text-sm text-slate-400 hover:text-red-400 transition-colors mt-2 underline"
+                                    >
+                                      Remove and upload new photo
+                                    </button>
+                                  </div>
                                 </div>
                               ) : (
-                                <div className="space-y-3">
-                                  <div className="w-16 h-16 mx-auto bg-gradient-to-br from-purple-500/20 to-violet-500/20 rounded-xl flex items-center justify-center animate-bounce">
-                                    <svg className="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                <div className="space-y-4">
+                                  <div className="w-24 h-24 mx-auto bg-gradient-to-br from-purple-500/20 to-violet-500/20 rounded-2xl flex items-center justify-center animate-bounce">
+                                    <svg
+                                      className="w-12 h-12 text-purple-400"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                      />
                                     </svg>
                                   </div>
                                   <div>
-                                    <p className="text-purple-300 font-medium">Upload Profile Photo</p>
-                                    <p className="text-slate-500 text-xs mt-1">PNG, JPG up to 10MB</p>
+                                    <p className="text-purple-300 font-semibold text-xl">
+                                      Upload Profile Photo
+                                    </p>
+                                    <p className="text-slate-500 mt-2">
+                                      PNG, JPG up to 10MB • Recommended:
+                                      400x400px
+                                    </p>
                                   </div>
                                 </div>
                               )}
                             </div>
                           </div>
-                          
+
                           {/* Enhanced Upload Button */}
-                          <button 
-                            onClick={() => document.querySelector('input[accept="image/*"]')?.click()}
-                            className="w-full mt-4 py-3 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25"
+                          <button
+                            onClick={() =>
+                              document
+                                .querySelector('input[accept="image/*"]')
+                                ?.click()
+                            }
+                            className="w-full mt-6 py-4 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-semibold text-lg rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25"
                           >
-                            <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            <svg
+                              className="w-5 h-5 inline mr-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                              />
                             </svg>
-                            Choose File
+                            Choose Profile Photo
                           </button>
                         </div>
                       </div>
@@ -906,17 +979,28 @@ export default function Home() {
                       <div className="group relative">
                         <div className="absolute -inset-1 bg-gradient-to-r from-cyan-600 via-blue-600 to-cyan-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
                         <div className="relative bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 group-hover:scale-105">
-                          
                           {/* Card Header */}
                           <div className="flex items-center gap-3 mb-4">
                             <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center">
-                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                              <svg
+                                className="w-4 h-4 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                                />
                               </svg>
                             </div>
-                            <h4 className="text-lg font-bold text-cyan-300">Signature AN</h4>
+                            <h4 className="text-lg font-bold text-cyan-300">
+                              Signature AN
+                            </h4>
                           </div>
-                          
+
                           {/* Upload Area */}
                           <div className="relative">
                             <Input
@@ -925,15 +1009,30 @@ export default function Home() {
                               onChange={(e) => onImage(e, setSignAnUrl)}
                               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                             />
-                            <div className={`border-2 border-dashed border-cyan-500/50 rounded-xl p-8 text-center transition-all duration-300 hover:border-cyan-400 hover:bg-cyan-500/5 ${signAnUrl ? 'border-green-500/50 bg-green-500/10' : ''}`}>
+                            <div
+                              className={`border-2 border-dashed border-cyan-500/50 rounded-xl p-8 text-center transition-all duration-300 hover:border-cyan-400 hover:bg-cyan-500/5 ${
+                                signAnUrl
+                                  ? "border-green-500/50 bg-green-500/10"
+                                  : ""
+                              }`}
+                            >
                               {signAnUrl ? (
                                 <div className="space-y-3">
                                   <div className="w-20 h-12 mx-auto rounded-lg overflow-hidden border-2 border-green-500/50 shadow-lg">
-                                    <img src={signAnUrl} alt="Signature AN Preview" className="w-full h-full object-cover" />
+                                    <img
+                                      src={signAnUrl}
+                                      alt="Signature AN Preview"
+                                      className="w-full h-full object-cover"
+                                    />
                                   </div>
-                                  <p className="text-green-400 font-medium">✓ Signature Uploaded</p>
-                                  <button 
-                                    onClick={(e) => {e.preventDefault(); setSignAnUrl(null);}}
+                                  <p className="text-green-400 font-medium">
+                                    ✓ Signature Uploaded
+                                  </p>
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      setSignAnUrl(null);
+                                    }}
                                     className="text-xs text-slate-400 hover:text-red-400 transition-colors"
                                   >
                                     Remove & upload new
@@ -942,26 +1041,54 @@ export default function Home() {
                               ) : (
                                 <div className="space-y-3">
                                   <div className="w-16 h-16 mx-auto bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl flex items-center justify-center animate-bounce">
-                                    <svg className="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    <svg
+                                      className="w-8 h-8 text-cyan-400"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                      />
                                     </svg>
                                   </div>
                                   <div>
-                                    <p className="text-cyan-300 font-medium">Upload Signature AN</p>
-                                    <p className="text-slate-500 text-xs mt-1">PNG, JPG up to 5MB</p>
+                                    <p className="text-cyan-300 font-medium">
+                                      Upload Signature AN
+                                    </p>
+                                    <p className="text-slate-500 text-xs mt-1">
+                                      PNG, JPG up to 5MB
+                                    </p>
                                   </div>
                                 </div>
                               )}
                             </div>
                           </div>
-                          
+
                           {/* Enhanced Upload Button */}
-                          <button 
-                            onClick={() => document.querySelectorAll('input[accept="image/*"]')[1]?.click()}
+                          <button
+                            onClick={() =>
+                              document
+                                .querySelectorAll('input[accept="image/*"]')[1]
+                                ?.click()
+                            }
                             className="w-full mt-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25"
                           >
-                            <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            <svg
+                              className="w-4 h-4 inline mr-2"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                              />
                             </svg>
                             Choose File
                           </button>
@@ -972,17 +1099,28 @@ export default function Home() {
                       <div className="group relative">
                         <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
                         <div className="relative bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 shadow-2xl hover:shadow-emerald-500/20 transition-all duration-500 group-hover:scale-105">
-                          
                           {/* Card Header */}
                           <div className="flex items-center gap-3 mb-4">
                             <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-green-500 rounded-lg flex items-center justify-center">
-                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                              <svg
+                                className="w-4 h-4 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                                />
                               </svg>
                             </div>
-                            <h4 className="text-lg font-bold text-emerald-300">Signature AG</h4>
+                            <h4 className="text-lg font-bold text-emerald-300">
+                              Signature AG
+                            </h4>
                           </div>
-                          
+
                           {/* Upload Area */}
                           <div className="relative">
                             <Input
@@ -991,15 +1129,30 @@ export default function Home() {
                               onChange={(e) => onImage(e, setSignAgUrl)}
                               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                             />
-                            <div className={`border-2 border-dashed border-emerald-500/50 rounded-xl p-8 text-center transition-all duration-300 hover:border-emerald-400 hover:bg-emerald-500/5 ${signAgUrl ? 'border-green-500/50 bg-green-500/10' : ''}`}>
+                            <div
+                              className={`border-2 border-dashed border-emerald-500/50 rounded-xl p-8 text-center transition-all duration-300 hover:border-emerald-400 hover:bg-emerald-500/5 ${
+                                signAgUrl
+                                  ? "border-green-500/50 bg-green-500/10"
+                                  : ""
+                              }`}
+                            >
                               {signAgUrl ? (
                                 <div className="space-y-3">
                                   <div className="w-20 h-12 mx-auto rounded-lg overflow-hidden border-2 border-green-500/50 shadow-lg">
-                                    <img src={signAgUrl} alt="Signature AG Preview" className="w-full h-full object-cover" />
+                                    <img
+                                      src={signAgUrl}
+                                      alt="Signature AG Preview"
+                                      className="w-full h-full object-cover"
+                                    />
                                   </div>
-                                  <p className="text-green-400 font-medium">✓ Signature Uploaded</p>
-                                  <button 
-                                    onClick={(e) => {e.preventDefault(); setSignAgUrl(null);}}
+                                  <p className="text-green-400 font-medium">
+                                    ✓ Signature Uploaded
+                                  </p>
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      setSignAgUrl(null);
+                                    }}
                                     className="text-xs text-slate-400 hover:text-red-400 transition-colors"
                                   >
                                     Remove & upload new
@@ -1008,26 +1161,54 @@ export default function Home() {
                               ) : (
                                 <div className="space-y-3">
                                   <div className="w-16 h-16 mx-auto bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-xl flex items-center justify-center animate-bounce">
-                                    <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    <svg
+                                      className="w-8 h-8 text-emerald-400"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                      />
                                     </svg>
                                   </div>
                                   <div>
-                                    <p className="text-emerald-300 font-medium">Upload Signature AG</p>
-                                    <p className="text-slate-500 text-xs mt-1">PNG, JPG up to 5MB</p>
+                                    <p className="text-emerald-300 font-medium">
+                                      Upload Signature AG
+                                    </p>
+                                    <p className="text-slate-500 text-xs mt-1">
+                                      PNG, JPG up to 5MB
+                                    </p>
                                   </div>
                                 </div>
                               )}
                             </div>
                           </div>
-                          
+
                           {/* Enhanced Upload Button */}
-                          <button 
-                            onClick={() => document.querySelectorAll('input[accept="image/*"]')[2]?.click()}
+                          <button
+                            onClick={() =>
+                              document
+                                .querySelectorAll('input[accept="image/*"]')[2]
+                                ?.click()
+                            }
                             className="w-full mt-4 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-emerald-500/25"
                           >
-                            <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                            <svg
+                              className="w-4 h-4 inline mr-2"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                              />
                             </svg>
                             Choose File
                           </button>
@@ -1038,42 +1219,85 @@ export default function Home() {
                     {/* Upload Progress & Status Bar */}
                     <div className="mt-8 p-6 bg-slate-800/30 border border-slate-700/30 rounded-2xl backdrop-blur-sm">
                       <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-lg font-semibold text-slate-300">Upload Status</h4>
+                        <h4 className="text-lg font-semibold text-slate-300">
+                          Upload Status
+                        </h4>
                         <div className="flex items-center gap-2">
-                          <div className={`w-3 h-3 rounded-full ${photoUrl ? 'bg-green-500' : 'bg-slate-600'} animate-pulse`}></div>
-                          <div className={`w-3 h-3 rounded-full ${signAnUrl ? 'bg-green-500' : 'bg-slate-600'} animate-pulse`}></div>
-                          <div className={`w-3 h-3 rounded-full ${signAgUrl ? 'bg-green-500' : 'bg-slate-600'} animate-pulse`}></div>
+                          <div
+                            className={`w-3 h-3 rounded-full ${
+                              photoUrl ? "bg-green-500" : "bg-slate-600"
+                            } animate-pulse`}
+                          ></div>
+                          <div
+                            className={`w-3 h-3 rounded-full ${
+                              signAnUrl ? "bg-green-500" : "bg-slate-600"
+                            } animate-pulse`}
+                          ></div>
+                          <div
+                            className={`w-3 h-3 rounded-full ${
+                              signAgUrl ? "bg-green-500" : "bg-slate-600"
+                            } animate-pulse`}
+                          ></div>
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div className="text-center">
-                          <p className={`font-medium ${photoUrl ? 'text-green-400' : 'text-slate-500'}`}>
-                            {photoUrl ? '✓ Profile Photo' : '○ Profile Photo'}
+                          <p
+                            className={`font-medium ${
+                              photoUrl ? "text-green-400" : "text-slate-500"
+                            }`}
+                          >
+                            {photoUrl ? "✓ Profile Photo" : "○ Profile Photo"}
                           </p>
                         </div>
                         <div className="text-center">
-                          <p className={`font-medium ${signAnUrl ? 'text-green-400' : 'text-slate-500'}`}>
-                            {signAnUrl ? '✓ Signature AN' : '○ Signature AN'}
+                          <p
+                            className={`font-medium ${
+                              signAnUrl ? "text-green-400" : "text-slate-500"
+                            }`}
+                          >
+                            {signAnUrl ? "✓ Signature AN" : "○ Signature AN"}
                           </p>
                         </div>
                         <div className="text-center">
-                          <p className={`font-medium ${signAgUrl ? 'text-green-400' : 'text-slate-500'}`}>
-                            {signAgUrl ? '✓ Signature AG' : '○ Signature AG'}
+                          <p
+                            className={`font-medium ${
+                              signAgUrl ? "text-green-400" : "text-slate-500"
+                            }`}
+                          >
+                            {signAgUrl ? "✓ Signature AG" : "○ Signature AG"}
                           </p>
                         </div>
                       </div>
-                      
+
                       {/* Progress Bar */}
                       <div className="mt-4">
                         <div className="flex justify-between text-xs text-slate-400 mb-2">
                           <span>Upload Progress</span>
-                          <span>{Math.round(((photoUrl ? 1 : 0) + (signAnUrl ? 1 : 0) + (signAgUrl ? 1 : 0)) / 3 * 100)}%</span>
+                          <span>
+                            {Math.round(
+                              (((photoUrl ? 1 : 0) +
+                                (signAnUrl ? 1 : 0) +
+                                (signAgUrl ? 1 : 0)) /
+                                3) *
+                                100
+                            )}
+                            %
+                          </span>
                         </div>
                         <div className="w-full bg-slate-700 rounded-full h-2">
-                          <div 
+                          <div
                             className="bg-gradient-to-r from-violet-500 to-purple-500 h-2 rounded-full transition-all duration-500 ease-out"
-                            style={{ width: `${((photoUrl ? 1 : 0) + (signAnUrl ? 1 : 0) + (signAgUrl ? 1 : 0)) / 3 * 100}%` }}
+                            style={{
+                              width: `${
+                                (((photoUrl ? 1 : 0) +
+                                  (signAnUrl ? 1 : 0) +
+                                  (signAgUrl ? 1 : 0)) /
+                                  3) *
+                                100
+                              }%`,
+                            }}
                           ></div>
                         </div>
                       </div>
