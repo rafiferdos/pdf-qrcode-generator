@@ -47,8 +47,8 @@ export default function Home() {
     "idle" | "checking" | "success" | "error"
   >("idle");
 
-  // Strong Password: SparkTech2025!@#QR
-  const MASTER_PASSWORD = "SparkTech2025!@#QR";
+  // Strong Password: UWYJ$vo^QGGM9D&0
+  const MASTER_PASSWORD = "UWYJ$vo^QGGM9D&0";
 
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [signAnUrl, setSignAnUrl] = useState<string | null>(null);
@@ -415,7 +415,8 @@ export default function Home() {
                         Secure Authentication Required
                       </p>
                       <p className="text-slate-500 text-xs">
-                        Enter your authorized master password to access the system
+                        Enter your authorized master password to access the
+                        system
                       </p>
                     </div>
                   </div>
