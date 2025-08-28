@@ -400,7 +400,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-x-6 mt-2">
+                    <div className="grid grid-cols-2 gap-x-6">
                       <div className="space-y-1">
                         <div className="flex gap-2">
                           <span className="whitespace-nowrap">
@@ -431,7 +431,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 items-end gap-6 mt-1">
+                    <div className="grid grid-cols-2 items-end gap-6">
                       {/* Signature AN */}
                       <div className="text-center text-sm">
                         <div className="h-16"></div>
