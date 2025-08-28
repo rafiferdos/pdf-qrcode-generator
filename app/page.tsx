@@ -56,9 +56,8 @@ export default function Home() {
       agNumber: "",
       maNumber: "",
       barcode: "",
-      createdAt: new Date().toLocaleDateString("de-DE"),
-      validTill: "",
-      note: "",
+  createdAt: new Date().toLocaleDateString("de-DE"),
+  validTill: "",
     },
   });
 
@@ -235,10 +234,7 @@ export default function Home() {
                       {...register("validTill")}
                     />
                   </div>
-                  <div className="sm:col-span-2">
-                    <Label htmlFor="note">Note</Label>
-                    <Textarea id="note" rows={2} {...register("note")} />
-                  </div>
+                  {/* note field removed */}
                 </div>
 
                 <div className="text-xs uppercase tracking-wide text-muted-foreground">
@@ -422,10 +418,14 @@ export default function Home() {
                             {watch("maNumber")}
                           </span>
                         </div>
-                        {/* Barcode removed from preview (value remains in form only) */}
+                        {/* Show barcode as plain text in preview (no barcode image) */}
+                        <div className="flex gap-2">
+                          <span className="whitespace-nowrap">Barcode:</span>
+                          <span className="font-semibold">{watch("barcode")}</span>
+                        </div>
                       </div>
                       <div className="flex items-end justify-end">
-                        {/* Barcode removed from preview */}
+                        {/* intentionally empty - textual barcode shown on left column */}
                       </div>
                     </div>
 
@@ -464,14 +464,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {watch("note") && (
-                      <p
-                        className="text-[13px] mt-4"
-                        style={{ color: "#374151" }}
-                      >
-                        {watch("note")}
-                      </p>
-                    )}
+                    {/* note removed from preview */}
 
                     <div className="flex items-center justify-center gap-4 text-[13px] mt-3">
                       <div>Erstelldatum: {watch("createdAt")}</div>
