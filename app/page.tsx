@@ -328,7 +328,7 @@ export default function Home() {
                   <div className="p-4">
                     <div className="grid grid-cols-[120px_1fr] gap-4 items-center">
                       <div
-                        className="h-[140px] w-[120px] overflow-hidden rounded-md border"
+                        className="h-[140px] w-[120px] overflow-hidden border ml-3"
                         style={{
                           backgroundColor: "#e5e7eb",
                           borderColor: "#e5e7eb",
@@ -340,7 +340,6 @@ export default function Home() {
                             alt="photo"
                             src={photoUrl as string}
                             className="h-full w-full object-cover"
-                            style={{ transform: "translateX(6px)" }}
                           />
                         )}
                       </div>
