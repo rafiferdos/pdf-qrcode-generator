@@ -325,10 +325,10 @@ export default function Home() {
               >
                 <div className="bg-white rounded-lg overflow-hidden">
                   {/* Header with photo and pseudo logo */}
-                  <div className="p-4">
+                  <div className="p-0.5">
                     <div className="grid grid-cols-[120px_1fr] gap-4 items-center">
                       <div
-                        className="h-[140px] w-[120px] overflow-hidden border ml-3"
+                        className="h-[140px] w-[120px] overflow-hidden border ml-5"
                         style={{
                           backgroundColor: "#e5e7eb",
                           borderColor: "#e5e7eb",
@@ -367,7 +367,7 @@ export default function Home() {
 
                   {/* Quick info band */}
                   <div
-                    className="px-4 py-4 grid grid-cols-[1fr_auto] gap-4 items-center"
+                    className="px-4 py-2 grid grid-cols-[1fr_auto] gap-4 items-center"
                     style={{ backgroundColor: "#b6e6f2" }}
                   >
                     <div className="grid gap-1 text-[15px]">
@@ -391,10 +391,10 @@ export default function Home() {
                   </div>
 
                   {/* Separator section with gray background */}
-                  <div className="bg-gray-100 h-4"></div>
+                  <div className="bg-gray-100 h-2"></div>
 
                   {/* Details section - separated from top section */}
-                  <div className="p-4 text-[14px] border-t border-gray-200">
+                  <div className="p-4 pt-2 text-[14px] border-t border-gray-200">
                     <p className="mb-1">
                       Der/Die Inhaber/in ist Mitarbeiter/in der Firma:
                     </p>
@@ -437,8 +437,8 @@ export default function Home() {
                     <div className="grid grid-cols-2 items-end gap-6 mt-1">
                       {/* Signature AN */}
                       <div className="text-center text-sm">
-                        <div className="h-6"></div>
-                        <div className="h-12 flex items-center justify-center py-1">
+                        <div className="h-4"></div>
+                        <div className="h-10 flex items-center justify-center py-1">
                           {signAnUrl && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
@@ -453,8 +453,8 @@ export default function Home() {
                       </div>
                       {/* Signature AG */}
                       <div className="text-center text-sm">
-                        <div className="h-6"></div>
-                        <div className="h-12 flex items-center justify-center py-1">
+                        <div className="h-4"></div>
+                        <div className="h-10 flex items-center justify-center py-1">
                           {signAgUrl && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
@@ -470,7 +470,7 @@ export default function Home() {
                     </div>
 
                     {/* Bottom text under signatures, left-aligned */}
-                    <div className="mt-4 text-left">
+                    <div className="mt-2 text-left">
                       <p className="text-[13px]" style={{ color: "#374151" }}>
                         Sollten Sie diesen Ausweis finden, so bitten wir Sie ihn
                         uns unfrei an obige Adresse zu senden.
@@ -479,7 +479,7 @@ export default function Home() {
 
                     {/* note removed from preview */}
 
-                    <div className="flex items-center justify-center gap-4 text-[13px] mt-3">
+                    <div className="flex items-center justify-center gap-4 text-[13px] mt-2">
                       <div>Erstelldatum: {watch("createdAt")}</div>
                       <div>Gültig bis: {watch("validTill")}</div>
                     </div>
