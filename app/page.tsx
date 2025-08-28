@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import jsPDF from 'jspdf'
 import QRCode from 'qrcode'
-import JsBarcode from 'jsbarcode'
+// JsBarcode removed: barcode will remain in the form but won't be rendered in preview or PDF
 import { Button } from '@/components/ui/button'
 
 const FormSchema = z.object({
@@ -41,7 +41,6 @@ export default function Home() {
   const [signAgUrl, setSignAgUrl] = useState<string | null>(null)
   // Using static logo from public now; no state needed
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null)
-  const [barcodeUrl, setBarcodeUrl] = useState<string | null>(null)
   const previewRef = useRef<HTMLDivElement>(null)
 
   const { register, handleSubmit, watch } = useForm<FormValues>({
@@ -66,7 +65,8 @@ export default function Home() {
   const firstName = watch('firstName')
   const lastName = watch('lastName')
   const idNumberVal = watch('idNumber')
-  const barcodeVal = watch('barcode')
+  // barcode value is still available in the form via watch('barcode'),
+  // but we won't generate or render an image for it in preview or PDF.
   const fullName = `${(lastName || '').trim()}, ${(firstName || '').trim()}`
 
   // Image upload helper
@@ -96,28 +96,7 @@ export default function Home() {
       .catch(() => setQrDataUrl(null))
   }, [idNumberVal])
 
-  // Generate barcode when barcode value changes
-  useEffect(() => {
-    if (!barcodeVal) {
-      setBarcodeUrl(null)
-      return
-    }
-    try {
-      const canvas = document.createElement('canvas')
-      const format: 'EAN13' | 'CODE128' =
-        barcodeVal.length === 13 ? 'EAN13' : 'CODE128'
-      JsBarcode(canvas, barcodeVal, {
-        format,
-        displayValue: false,
-        margin: 0,
-        height: 40,
-        background: '#ffffff',
-      })
-      setBarcodeUrl(canvas.toDataURL('image/png'))
-    } catch {
-      setBarcodeUrl(null)
-    }
-  }, [barcodeVal])
+  // Barcode generation intentionally disabled - barcode remains as a text field only.
 
   // No-op submit to keep the Update Preview button semantic; watch() already updates live
   const onSubmit = () => {}
@@ -332,24 +311,9 @@ export default function Home() {
     drawText('Bewacherregisternummer Ma:', pad, y, 9)
     drawText(watch('maNumber') || '', pad + pxToMm(160), y, 9, true)
     y += pxToMm(24) // space-y-1
-    drawText('Barcode:', pad, y, 9)
-    drawText(watch('barcode') || '', pad + pxToMm(60), y, 9, true)
-
-    // Barcode image on the right
-    const barcodeWidth = pxToMm(160) // Estimated barcode width
-    const barcodeHeight = pxToMm(40) // h-10 = 40px
-    if (barcodeUrl)
-      pdf.addImage(
-        barcodeUrl,
-        'PNG',
-        W - pad - barcodeWidth,
-        registryStartY + pxToMm(32),
-        barcodeWidth,
-        barcodeHeight
-      )
-
-    // Add extra spacing to prevent overlapping
-    y += pxToMm(40) // Additional spacing after barcode section
+  // Barcode intentionally excluded from PDF output; only the form holds the value.
+  // Add extra spacing to keep original layout spacing
+  y += pxToMm(40)
 
     // Signatures - matching preview layout exactly
     y += pxToMm(8) // mt-2 (reduced from mt-6 by 60%)
@@ -729,14 +693,8 @@ export default function Home() {
                         </div>
                       </div>
                       <div className='flex items-end justify-end'>
-                        {barcodeUrl && (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={barcodeUrl}
-                            alt='barcode'
-                            className='h-10'
-                          />
-                        )}
+                        {/* Barcode image intentionally hidden in preview; keep text value only */}
+                        <div className='font-semibold'>{watch('barcode')}</div>
                       </div>
                     </div>
 
