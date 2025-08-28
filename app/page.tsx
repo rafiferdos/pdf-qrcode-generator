@@ -389,7 +389,7 @@ export default function Home() {
                           src={qrDataUrl}
                           alt="qr"
                           className="h-20 w-20"
-                          style={{ marginLeft: "60px" }}
+                          style={{ transform: "translateX(6px)" }}
                         />
                       )}
                     </div>
