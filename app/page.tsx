@@ -416,7 +416,9 @@ export default function Home() {
                         </div>
                         {/* Show barcode as plain text in preview (no barcode image) */}
                         <div className="flex gap-2">
-                          <span className="whitespace-nowrap font-semibold">Barcode:</span>
+                          <span className="whitespace-nowrap font-semibold">
+                            Barcode:
+                          </span>
                           <span>{watch("barcode")}</span>
                         </div>
                       </div>
