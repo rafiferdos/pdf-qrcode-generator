@@ -37,6 +37,19 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>;
 
 export default function Home() {
+  // Authentication State
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loginAttempts, setLoginAttempts] = useState<number>(0);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [animationState, setAnimationState] = useState<
+    "idle" | "checking" | "success" | "error"
+  >("idle");
+
+  // Strong Password: SparkTech2025!@#QR
+  const MASTER_PASSWORD = "SparkTech2025!@#QR";
+
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [signAnUrl, setSignAnUrl] = useState<string | null>(null);
   const [signAgUrl, setSignAgUrl] = useState<string | null>(null);
@@ -104,6 +117,30 @@ export default function Home() {
 
   // No-op submit to keep the Update Preview button semantic; watch() already updates live
   const onSubmit = () => {};
+
+  // Authentication Function with Animation
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setAnimationState("checking");
+
+    // Simulate secure authentication delay
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    if (password === MASTER_PASSWORD) {
+      setAnimationState("success");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setIsAuthenticated(true);
+      setLoginAttempts(0);
+    } else {
+      setAnimationState("error");
+      setLoginAttempts((prev) => prev + 1);
+      setPassword("");
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setAnimationState("idle");
+    }
+    setIsLoading(false);
+  };
   // New: Snapshot the preview DOM to an image and embed it into a single-page PDF
   const downloadPdfSnapshot = async () => {
     if (!previewRef.current) return;
@@ -147,64 +184,70 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-spin duration-[20s]"></div>
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 py-8">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-2xl mb-6 shadow-2xl">
-            <svg
-              className="w-8 h-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-          </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-purple-200 to-cyan-200 bg-clip-text text-transparent mb-4">
-            Professional ID Card Generator
-          </h1>
-          <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-            Create stunning professional identification cards with advanced
-            customization and instant PDF export
-          </p>
-        </div>
+      {!isAuthenticated ? (
+        // PROFESSIONAL ANIMATED LOGIN INTERFACE
+        <div className="min-h-screen flex items-center justify-center relative">
+          <div className="w-full max-w-md mx-auto p-8">
+            {/* Login Card */}
+            <div className="relative">
+              {/* Animated Border Glow */}
+              <div
+                className={`absolute inset-0 bg-gradient-to-r from-purple-600 via-cyan-600 to-purple-600 rounded-3xl blur-lg transition-all duration-1000 ${
+                  animationState === "checking"
+                    ? "animate-pulse scale-105"
+                    : animationState === "success"
+                    ? "bg-green-500 scale-110"
+                    : animationState === "error"
+                    ? "bg-red-500 animate-shake"
+                    : ""
+                }`}
+              ></div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
-          {/* Enhanced Form Card */}
-          <Card className="backdrop-blur-xl bg-slate-800/50 border-slate-700/50 shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover:scale-[1.02] group">
-            <CardHeader className="bg-gradient-to-r from-purple-600/20 to-cyan-600/20 border-b border-slate-700/50">
-              <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-4 h-4 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+              <div className="relative bg-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 shadow-2xl">
+                {/* Logo and Title */}
+                <div className="text-center mb-8">
+                  <div
+                    className={`inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-2xl mb-6 transition-all duration-500 ${
+                      animationState === "checking"
+                        ? "animate-spin"
+                        : animationState === "success"
+                        ? "scale-110 bg-green-500"
+                        : animationState === "error"
+                        ? "animate-bounce bg-red-500"
+                        : ""
+                    }`}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    />
-                  </svg>
-                </div>
-                Card Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8">
-              <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
-                {/* Personal Information Section */}
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
+                    {animationState === "success" ? (
                       <svg
-                        className="w-3 h-3 text-white"
+                        className="w-10 h-10 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={3}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    ) : animationState === "error" ? (
+                      <svg
+                        className="w-10 h-10 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={3}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        className="w-10 h-10 text-white"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -213,667 +256,935 @@ export default function Home() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={2}
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                         />
                       </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold text-emerald-400 uppercase tracking-wider">
-                      Personal Information
-                    </h3>
+                    )}
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-3 group">
-                      <Label
-                        htmlFor="firstName"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        First Name
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="firstName"
-                          placeholder=""
-                          {...register("firstName")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
+                  <h1 className="text-3xl font-bold bg-gradient-to-r from-white via-purple-200 to-cyan-200 bg-clip-text text-transparent mb-2">
+                    Secure Access
+                  </h1>
+                  <p className="text-slate-400 text-lg">
+                    Professional ID Card Generator
+                  </p>
+                  {loginAttempts > 0 && (
+                    <div className="mt-4 p-3 bg-red-900/50 border border-red-700/50 rounded-lg">
+                      <p className="text-red-300 text-sm">
+                        Incorrect password. Attempts: {loginAttempts}/3
+                      </p>
                     </div>
-                    <div className="space-y-3 group">
-                      <Label
-                        htmlFor="lastName"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        Last Name
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="lastName"
-                          placeholder=""
-                          {...register("lastName")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-3 group">
-                      <Label
-                        htmlFor="personalNumber"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        Personal Number
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="personalNumber"
-                          {...register("personalNumber")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-3 group">
-                      <Label
-                        htmlFor="idNumber"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        ID Number
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="idNumber"
-                          {...register("idNumber")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                  </div>
+                  )}
                 </div>
 
-                {/* Company Information Section */}
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-3 h-3 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                {/* Login Form */}
+                <form onSubmit={handlePasswordSubmit} className="space-y-6">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="password"
+                      className="text-slate-300 font-semibold"
+                    >
+                      Master Password
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter your master password"
+                        className={`bg-slate-800/50 border-slate-600 text-white placeholder-slate-400 pr-12 py-4 text-lg rounded-xl transition-all duration-300 ${
+                          animationState === "error"
+                            ? "border-red-500 animate-shake"
+                            : animationState === "success"
+                            ? "border-green-500"
+                            : "focus:border-purple-500 focus:ring-purple-500/20"
+                        }`}
+                        disabled={isLoading}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                        disabled={isLoading}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold text-blue-400 uppercase tracking-wider">
-                      Company Details
-                    </h3>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="sm:col-span-2 space-y-3 group">
-                      <Label
-                        htmlFor="address"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        Company Address
-                      </Label>
-                      <div className="relative">
-                        <Textarea
-                          id="address"
-                          rows={3}
-                          {...register("address")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500 resize-none"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-3 group">
-                      <Label
-                        htmlFor="phone"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        Phone
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="phone"
-                          {...register("phone")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-3 group">
-                      <Label
-                        htmlFor="fax"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        Fax (Optional)
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="fax"
-                          {...register("fax")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
+                        {showPassword ? (
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                            />
+                          </svg>
+                        )}
+                      </button>
                     </div>
                   </div>
-                </div>
 
-                {/* Registry Information Section */}
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-6 h-6 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-3 h-3 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold text-amber-400 uppercase tracking-wider">
-                      Registry Information
-                    </h3>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-3 group">
-                      <Label
-                        htmlFor="agNumber"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        Registry Number AG
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="agNumber"
-                          {...register("agNumber")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-3 group">
-                      <Label
-                        htmlFor="maNumber"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        Registry Number Ma
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="maNumber"
-                          {...register("maNumber")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                    <div className="sm:col-span-2 space-y-3 group">
-                      <Label
-                        htmlFor="barcode"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        Barcode
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="barcode"
-                          {...register("barcode")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Validity Information Section */}
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-3 h-3 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 8l6-6m0 0l6 6M6 10l6 6"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold text-rose-400 uppercase tracking-wider">
-                      Validity Period
-                    </h3>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-3 group">
-                      <Label
-                        htmlFor="createdAt"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        Issue Date
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="createdAt"
-                          placeholder=""
-                          {...register("createdAt")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-3 group">
-                      <Label
-                        htmlFor="validTill"
-                        className="text-slate-300 font-medium group-hover:text-white transition-colors"
-                      >
-                        Expiry Date
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="validTill"
-                          placeholder=""
-                          {...register("validTill")}
-                          className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* File Upload Section */}
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-6 h-6 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-3 h-3 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold text-violet-400 uppercase tracking-wider">
-                      Upload Assets
-                    </h3>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div className="space-y-3 group">
-                      <Label className="text-slate-300 font-medium group-hover:text-white transition-colors">
-                        Profile Photo
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => onImage(e, setPhotoUrl)}
-                          className="bg-slate-900/50 border-slate-600 text-white file:bg-purple-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 file:font-medium hover:file:bg-purple-700 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-3 group">
-                      <Label className="text-slate-300 font-medium group-hover:text-white transition-colors">
-                        Signature AN
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => onImage(e, setSignAnUrl)}
-                          className="bg-slate-900/50 border-slate-600 text-white file:bg-cyan-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 file:font-medium hover:file:bg-cyan-700 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-3 group">
-                      <Label className="text-slate-300 font-medium group-hover:text-white transition-colors">
-                        Signature AG
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => onImage(e, setSignAgUrl)}
-                          className="bg-slate-900/50 border-slate-600 text-white file:bg-emerald-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 file:font-medium hover:file:bg-emerald-700 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-4 pt-6">
                   <Button
                     type="submit"
-                    className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105"
+                    disabled={isLoading || !password.trim()}
+                    className={`w-full py-4 text-lg font-semibold rounded-xl transition-all duration-300 transform ${
+                      isLoading ? "scale-95" : "hover:scale-105"
+                    } ${
+                      animationState === "checking"
+                        ? "bg-gradient-to-r from-blue-600 to-blue-700"
+                        : animationState === "success"
+                        ? "bg-gradient-to-r from-green-600 to-green-700"
+                        : animationState === "error"
+                        ? "bg-gradient-to-r from-red-600 to-red-700"
+                        : "bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700"
+                    } shadow-lg`}
                   >
-                    <svg
-                      className="w-5 h-5 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                      />
-                    </svg>
-                    Update Preview
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={downloadPdfSnapshot}
-                    className="flex-1 border-2 border-cyan-600 text-cyan-400 hover:bg-cyan-600 hover:text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 transform hover:scale-105"
-                  >
-                    <svg
-                      className="w-5 h-5 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                    Download PDF
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-
-          <Card className="backdrop-blur-xl bg-slate-900/90 border-slate-700/50 shadow-2xl shadow-purple-500/10 hover:shadow-purple-500/20 transition-all duration-500">
-            <CardHeader className="bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700/50">
-              <CardTitle className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-4 h-4 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                    />
-                  </svg>
-                </div>
-                Live Preview
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 bg-gradient-to-br from-slate-900 to-slate-800">
-              {/* Preview Area with Enhanced Styling */}
-              <div className="relative rounded-2xl overflow-hidden border border-slate-600/50 shadow-2xl">
-                {/* Animated Border Glow */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-cyan-600/20 to-purple-600/20 blur-sm animate-pulse"></div>
-                <div className="relative bg-slate-800/50 backdrop-blur-sm">
-                  <div
-                    ref={previewRef}
-                    className="w-[680px] max-w-full rounded-xl overflow-hidden border mx-auto p-3 bg-gray-400 relative"
-                    style={{
-                      backgroundColor: "#f3f4f6",
-                      color: "#000000",
-                      borderColor: "#e5e7eb",
-                      // Override Tailwind CSS vars with safe sRGB colors so html2canvas doesn't parse oklch/lab
-                      ["--background" as string]: "#ffffff",
-                      ["--foreground" as string]: "#000000",
-                      ["--card" as string]: "#ffffff",
-                      ["--card-foreground" as string]: "#000000",
-                      ["--popover" as string]: "#ffffff",
-                      ["--popover-foreground" as string]: "#000000",
-                      ["--primary" as string]: "#1e40af",
-                      ["--primary-foreground" as string]: "#ffffff",
-                      ["--secondary" as string]: "#f3f4f6",
-                      ["--secondary-foreground" as string]: "#111827",
-                      ["--muted" as string]: "#f3f4f6",
-                      ["--muted-foreground" as string]: "#6b7280",
-                      ["--accent" as string]: "#f3f4f6",
-                      ["--accent-foreground" as string]: "#111827",
-                      ["--destructive" as string]: "#ef4444",
-                      ["--border" as string]: "#e5e7eb",
-                      ["--input" as string]: "#e5e7eb",
-                      ["--ring" as string]: "#1e40af",
-                    }}
-                  >
-                    <div className="bg-white rounded-lg overflow-hidden">
-                      {/* Header with photo and pseudo logo */}
-                      <div className="p-0.5">
-                        <div className="grid grid-cols-[120px_1fr] gap-4 items-center">
-                          <div
-                            className="h-[140px] w-[120px] overflow-hidden border ml-5"
-                            style={{
-                              backgroundColor: "#e5e7eb",
-                              borderColor: "#e5e7eb",
-                            }}
-                          >
-                            {photoUrl && (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img
-                                alt="photo"
-                                src={photoUrl as string}
-                                className="h-full w-full object-cover"
-                              />
-                            )}
-                          </div>
-                          <div className="flex items-center justify-center">
-                            <div className="flex flex-col items-center text-center">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
-                                src="/logo-united.png"
-                                alt="company logo"
-                                className="h-38 object-contain mb-1"
-                              />
-                              {/* Company name and city text removed; logo-only header */}
-                            </div>
-                          </div>
-                        </div>
+                    {isLoading ? (
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>
+                          {animationState === "checking"
+                            ? "Authenticating..."
+                            : "Processing..."}
+                        </span>
                       </div>
-
-                      {/* Name bar */}
-                      <div
-                        className="px-4 py-2 text-2xl font-semibold"
-                        style={{ backgroundColor: "#1e40af", color: "#ffffff" }}
-                      >
-                        {fullName}
-                      </div>
-
-                      {/* Quick info band */}
-                      <div
-                        className="px-4 grid grid-cols-[1fr_auto] gap-4 items-center"
-                        style={{ backgroundColor: "#b6e6f2" }}
-                      >
-                        <div className="grid gap-1 text-[15px]">
-                          <div className="flex items-center gap-2">
-                            <span style={{ color: "#374151" }}>
-                              Personalnummer:
-                            </span>
-                            <strong>{watch("personalNumber")}</strong>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span style={{ color: "#374151" }}>
-                              Ausweisnummer:
-                            </span>
-                            <strong>{watch("idNumber")}</strong>
-                          </div>
-                        </div>
-                        <div
-                          className="flex flex-col items-center gap-2 p-2 rounded"
-                          style={{ backgroundColor: "#b6e6f2" }}
+                    ) : (
+                      <div className="flex items-center justify-center space-x-2">
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
                         >
-                          {qrDataUrl && (
-                            <div
-                              className="h-20 w-20 flex items-center justify-center"
-                              style={{ backgroundColor: "#b6e6f2" }}
-                            >
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
-                                src={qrDataUrl}
-                                alt="qr"
-                                className="h-20 w-20"
-                                style={{
-                                  mixBlendMode: "multiply",
-                                  filter: "contrast(1.2)",
-                                }}
-                              />
-                            </div>
-                          )}
-                        </div>
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                          />
+                        </svg>
+                        <span>Access System</span>
                       </div>
+                    )}
+                  </Button>
+                </form>
 
-                      {/* Separator section with gray background */}
-                      <div className="bg-gray-100 h-2"></div>
-
-                      {/* Details section - separated from top section */}
-                      <div className="p-4 pt-2 text-[14px] border-t border-gray-200">
-                        <p className="mb-1">
-                          Der/Die Inhaber/in ist Mitarbeiter/in der Firma:
-                        </p>
-                        {/* Company name removed from details */}
-                        <div className="grid grid-cols-[1fr_auto] gap-4">
-                          <div className="whitespace-pre-line font-semibold">
-                            {watch("address")}
-                          </div>
-                          <div>
-                            <div>Tel: {watch("phone")}</div>
-                            {watch("fax") && <div>Fax: {watch("fax")}</div>}
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-x-6">
-                          <div className="space-y-1">
-                            <div className="flex gap-2">
-                              <p className="whitespace-nowrap">
-                                Bewacherregisternummer AG:
-                              </p>
-                              <span className="font-bold">
-                                {watch("agNumber")}
-                              </span>
-                            </div>
-                            <div className="flex gap-2">
-                              <p className="whitespace-nowrap">
-                                Bewacherregisternummer Ma:
-                              </p>
-                              <span className="font-bold">
-                                {watch("maNumber")}
-                              </span>
-                            </div>
-                            {/* Show barcode as plain text in preview (no barcode image) */}
-                            <div className="flex gap-2">
-                              <p className="whitespace-nowrap">Barcode:</p>
-                              <span className="font-bold">
-                                {watch("barcode")}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="flex items-end justify-end">
-                            {/* intentionally empty - textual barcode shown on left column */}
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 items-end gap-6 mt-0">
-                          {/* Signature AN */}
-                          <div className="text-center text-sm">
-                            <div className="h-10 flex items-center justify-center py-1">
-                              {signAnUrl && (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
-                                  src={signAnUrl as string}
-                                  alt="sign an"
-                                  className="max-h-full max-w-full object-contain"
-                                />
-                              )}
-                            </div>
-                            <div style={{ borderTop: "1px solid #e5e7eb" }} />
-                            <div style={{ color: "#374151" }}>
-                              Unterschrift AN
-                            </div>
-                          </div>
-                          {/* Signature AG */}
-                          <div className="text-center text-sm">
-                            <div className="h-10 flex items-center justify-center py-1">
-                              {signAgUrl && (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
-                                  src={signAgUrl as string}
-                                  alt="sign ag"
-                                  className="max-h-full max-w-full object-contain"
-                                />
-                              )}
-                            </div>
-                            <div style={{ borderTop: "1px solid #e5e7eb" }} />
-                            <div style={{ color: "#374151" }}>
-                              Unterschrift AG
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Bottom text under signatures, left-aligned */}
-                        <div className="mt-2 text-left">
-                          <p
-                            className="text-[13px]"
-                            style={{ color: "#374151" }}
-                          >
-                            Sollten Sie diesen Ausweis finden, so bitten wir Sie
-                            ihn uns unfrei an obige Adresse zu senden.
-                          </p>
-                        </div>
-
-                        {/* note removed from preview */}
-
-                        <div className="flex items-center justify-center gap-4 text-[13px] mt-2">
-                          <div>Erstelldatum: {watch("createdAt")}</div>
-                          <div>Gültig bis: {watch("validTill")}</div>
-                        </div>
-                      </div>
+                {/* Security Info */}
+                <div className="mt-8 p-4 bg-slate-800/30 border border-slate-700/30 rounded-xl">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-4 h-4 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-slate-300 text-sm font-medium">
+                        Strong Password Required
+                      </p>
+                      <p className="text-slate-500 text-xs">
+                        Your master password: SparkTech2025!@#QR
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        // MAIN APPLICATION (shown after authentication)
+        <div className="relative mx-auto max-w-7xl px-4 py-8">
+          {/* Logout Button */}
+          <div className="absolute top-4 right-4 z-50">
+            <Button
+              onClick={() => {
+                setIsAuthenticated(false);
+                setPassword("");
+                setAnimationState("idle");
+              }}
+              variant="outline"
+              className="bg-slate-800/50 border-slate-600 text-slate-300 hover:bg-red-600 hover:text-white hover:border-red-500 transition-all duration-300"
+            >
+              <svg
+                className="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
+              Logout
+            </Button>
+          </div>
+
+          {/* Header Section */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-2xl mb-6 shadow-2xl">
+              <svg
+                className="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-purple-200 to-cyan-200 bg-clip-text text-transparent mb-4">
+              Professional ID Card Generator
+            </h1>
+            <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+              Create stunning professional identification cards with advanced
+              customization and instant PDF export
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
+            {/* Enhanced Form Card */}
+            <Card className="backdrop-blur-xl bg-slate-800/50 border-slate-700/50 shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 hover:scale-[1.02] group">
+              <CardHeader className="bg-gradient-to-r from-purple-600/20 to-cyan-600/20 border-b border-slate-700/50">
+                <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                  </div>
+                  Card Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-8">
+                <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
+                  {/* Personal Information Section */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
+                        <svg
+                          className="w-3 h-3 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold text-emerald-400 uppercase tracking-wider">
+                        Personal Information
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="space-y-3 group">
+                        <Label
+                          htmlFor="firstName"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          First Name
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="firstName"
+                            placeholder=""
+                            {...register("firstName")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                      <div className="space-y-3 group">
+                        <Label
+                          htmlFor="lastName"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          Last Name
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="lastName"
+                            placeholder=""
+                            {...register("lastName")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                      <div className="space-y-3 group">
+                        <Label
+                          htmlFor="personalNumber"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          Personal Number
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="personalNumber"
+                            {...register("personalNumber")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                      <div className="space-y-3 group">
+                        <Label
+                          htmlFor="idNumber"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          ID Number
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="idNumber"
+                            {...register("idNumber")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Company Information Section */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
+                        <svg
+                          className="w-3 h-3 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold text-blue-400 uppercase tracking-wider">
+                        Company Details
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="sm:col-span-2 space-y-3 group">
+                        <Label
+                          htmlFor="address"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          Company Address
+                        </Label>
+                        <div className="relative">
+                          <Textarea
+                            id="address"
+                            rows={3}
+                            {...register("address")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500 resize-none"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                      <div className="space-y-3 group">
+                        <Label
+                          htmlFor="phone"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          Phone
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="phone"
+                            {...register("phone")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                      <div className="space-y-3 group">
+                        <Label
+                          htmlFor="fax"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          Fax (Optional)
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="fax"
+                            {...register("fax")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Registry Information Section */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-6 h-6 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center">
+                        <svg
+                          className="w-3 h-3 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold text-amber-400 uppercase tracking-wider">
+                        Registry Information
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="space-y-3 group">
+                        <Label
+                          htmlFor="agNumber"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          Registry Number AG
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="agNumber"
+                            {...register("agNumber")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                      <div className="space-y-3 group">
+                        <Label
+                          htmlFor="maNumber"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          Registry Number Ma
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="maNumber"
+                            {...register("maNumber")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                      <div className="sm:col-span-2 space-y-3 group">
+                        <Label
+                          htmlFor="barcode"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          Barcode
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="barcode"
+                            {...register("barcode")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Validity Information Section */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full flex items-center justify-center">
+                        <svg
+                          className="w-3 h-3 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 8l6-6m0 0l6 6M6 10l6 6"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold text-rose-400 uppercase tracking-wider">
+                        Validity Period
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="space-y-3 group">
+                        <Label
+                          htmlFor="createdAt"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          Issue Date
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="createdAt"
+                            placeholder=""
+                            {...register("createdAt")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                      <div className="space-y-3 group">
+                        <Label
+                          htmlFor="validTill"
+                          className="text-slate-300 font-medium group-hover:text-white transition-colors"
+                        >
+                          Expiry Date
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="validTill"
+                            placeholder=""
+                            {...register("validTill")}
+                            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* File Upload Section */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-6 h-6 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full flex items-center justify-center">
+                        <svg
+                          className="w-3 h-3 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold text-violet-400 uppercase tracking-wider">
+                        Upload Assets
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      <div className="space-y-3 group">
+                        <Label className="text-slate-300 font-medium group-hover:text-white transition-colors">
+                          Profile Photo
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => onImage(e, setPhotoUrl)}
+                            className="bg-slate-900/50 border-slate-600 text-white file:bg-purple-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 file:font-medium hover:file:bg-purple-700 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                      <div className="space-y-3 group">
+                        <Label className="text-slate-300 font-medium group-hover:text-white transition-colors">
+                          Signature AN
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => onImage(e, setSignAnUrl)}
+                            className="bg-slate-900/50 border-slate-600 text-white file:bg-cyan-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 file:font-medium hover:file:bg-cyan-700 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                      <div className="space-y-3 group">
+                        <Label className="text-slate-300 font-medium group-hover:text-white transition-colors">
+                          Signature AG
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => onImage(e, setSignAgUrl)}
+                            className="bg-slate-900/50 border-slate-600 text-white file:bg-emerald-600 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:mr-4 file:font-medium hover:file:bg-emerald-700 focus:border-purple-500 focus:ring-purple-500/20 transition-all duration-300 hover:border-slate-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/5 group-hover:to-cyan-500/5 rounded-md transition-all duration-300 pointer-events-none"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-4 pt-6">
+                    <Button
+                      type="submit"
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105"
+                    >
+                      <svg
+                        className="w-5 h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        />
+                      </svg>
+                      Update Preview
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={downloadPdfSnapshot}
+                      className="flex-1 border-2 border-cyan-600 text-cyan-400 hover:bg-cyan-600 hover:text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 transform hover:scale-105"
+                    >
+                      <svg
+                        className="w-5 h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                      Download PDF
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+
+            <Card className="backdrop-blur-xl bg-slate-900/90 border-slate-700/50 shadow-2xl shadow-purple-500/10 hover:shadow-purple-500/20 transition-all duration-500">
+              <CardHeader className="bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700/50">
+                <CardTitle className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                  </div>
+                  Live Preview
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-8 bg-gradient-to-br from-slate-900 to-slate-800">
+                {/* Preview Area with Enhanced Styling */}
+                <div className="relative rounded-2xl overflow-hidden border border-slate-600/50 shadow-2xl">
+                  {/* Animated Border Glow */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-cyan-600/20 to-purple-600/20 blur-sm animate-pulse"></div>
+                  <div className="relative bg-slate-800/50 backdrop-blur-sm">
+                    <div
+                      ref={previewRef}
+                      className="w-[680px] max-w-full rounded-xl overflow-hidden border mx-auto p-3 bg-gray-400 relative"
+                      style={{
+                        backgroundColor: "#f3f4f6",
+                        color: "#000000",
+                        borderColor: "#e5e7eb",
+                        // Override Tailwind CSS vars with safe sRGB colors so html2canvas doesn't parse oklch/lab
+                        ["--background" as string]: "#ffffff",
+                        ["--foreground" as string]: "#000000",
+                        ["--card" as string]: "#ffffff",
+                        ["--card-foreground" as string]: "#000000",
+                        ["--popover" as string]: "#ffffff",
+                        ["--popover-foreground" as string]: "#000000",
+                        ["--primary" as string]: "#1e40af",
+                        ["--primary-foreground" as string]: "#ffffff",
+                        ["--secondary" as string]: "#f3f4f6",
+                        ["--secondary-foreground" as string]: "#111827",
+                        ["--muted" as string]: "#f3f4f6",
+                        ["--muted-foreground" as string]: "#6b7280",
+                        ["--accent" as string]: "#f3f4f6",
+                        ["--accent-foreground" as string]: "#111827",
+                        ["--destructive" as string]: "#ef4444",
+                        ["--border" as string]: "#e5e7eb",
+                        ["--input" as string]: "#e5e7eb",
+                        ["--ring" as string]: "#1e40af",
+                      }}
+                    >
+                      <div className="bg-white rounded-lg overflow-hidden">
+                        {/* Header with photo and pseudo logo */}
+                        <div className="p-0.5">
+                          <div className="grid grid-cols-[120px_1fr] gap-4 items-center">
+                            <div
+                              className="h-[140px] w-[120px] overflow-hidden border ml-5"
+                              style={{
+                                backgroundColor: "#e5e7eb",
+                                borderColor: "#e5e7eb",
+                              }}
+                            >
+                              {photoUrl && (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
+                                  alt="photo"
+                                  src={photoUrl as string}
+                                  className="h-full w-full object-cover"
+                                />
+                              )}
+                            </div>
+                            <div className="flex items-center justify-center">
+                              <div className="flex flex-col items-center text-center">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src="/logo-united.png"
+                                  alt="company logo"
+                                  className="h-38 object-contain mb-1"
+                                />
+                                {/* Company name and city text removed; logo-only header */}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Name bar */}
+                        <div
+                          className="px-4 py-2 text-2xl font-semibold"
+                          style={{
+                            backgroundColor: "#1e40af",
+                            color: "#ffffff",
+                          }}
+                        >
+                          {fullName}
+                        </div>
+
+                        {/* Quick info band */}
+                        <div
+                          className="px-4 grid grid-cols-[1fr_auto] gap-4 items-center"
+                          style={{ backgroundColor: "#b6e6f2" }}
+                        >
+                          <div className="grid gap-1 text-[15px]">
+                            <div className="flex items-center gap-2">
+                              <span style={{ color: "#374151" }}>
+                                Personalnummer:
+                              </span>
+                              <strong>{watch("personalNumber")}</strong>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span style={{ color: "#374151" }}>
+                                Ausweisnummer:
+                              </span>
+                              <strong>{watch("idNumber")}</strong>
+                            </div>
+                          </div>
+                          <div
+                            className="flex flex-col items-center gap-2 p-2 rounded"
+                            style={{ backgroundColor: "#b6e6f2" }}
+                          >
+                            {qrDataUrl && (
+                              <div
+                                className="h-20 w-20 flex items-center justify-center"
+                                style={{ backgroundColor: "#b6e6f2" }}
+                              >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={qrDataUrl}
+                                  alt="qr"
+                                  className="h-20 w-20"
+                                  style={{
+                                    mixBlendMode: "multiply",
+                                    filter: "contrast(1.2)",
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Separator section with gray background */}
+                        <div className="bg-gray-100 h-2"></div>
+
+                        {/* Details section - separated from top section */}
+                        <div className="p-4 pt-2 text-[14px] border-t border-gray-200">
+                          <p className="mb-1">
+                            Der/Die Inhaber/in ist Mitarbeiter/in der Firma:
+                          </p>
+                          {/* Company name removed from details */}
+                          <div className="grid grid-cols-[1fr_auto] gap-4">
+                            <div className="whitespace-pre-line font-semibold">
+                              {watch("address")}
+                            </div>
+                            <div>
+                              <div>Tel: {watch("phone")}</div>
+                              {watch("fax") && <div>Fax: {watch("fax")}</div>}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-x-6">
+                            <div className="space-y-1">
+                              <div className="flex gap-2">
+                                <p className="whitespace-nowrap">
+                                  Bewacherregisternummer AG:
+                                </p>
+                                <span className="font-bold">
+                                  {watch("agNumber")}
+                                </span>
+                              </div>
+                              <div className="flex gap-2">
+                                <p className="whitespace-nowrap">
+                                  Bewacherregisternummer Ma:
+                                </p>
+                                <span className="font-bold">
+                                  {watch("maNumber")}
+                                </span>
+                              </div>
+                              {/* Show barcode as plain text in preview (no barcode image) */}
+                              <div className="flex gap-2">
+                                <p className="whitespace-nowrap">Barcode:</p>
+                                <span className="font-bold">
+                                  {watch("barcode")}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-end justify-end">
+                              {/* intentionally empty - textual barcode shown on left column */}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 items-end gap-6 mt-0">
+                            {/* Signature AN */}
+                            <div className="text-center text-sm">
+                              <div className="h-10 flex items-center justify-center py-1">
+                                {signAnUrl && (
+                                  // eslint-disable-next-line @next/next/no-img-element
+                                  <img
+                                    src={signAnUrl as string}
+                                    alt="sign an"
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                )}
+                              </div>
+                              <div style={{ borderTop: "1px solid #e5e7eb" }} />
+                              <div style={{ color: "#374151" }}>
+                                Unterschrift AN
+                              </div>
+                            </div>
+                            {/* Signature AG */}
+                            <div className="text-center text-sm">
+                              <div className="h-10 flex items-center justify-center py-1">
+                                {signAgUrl && (
+                                  // eslint-disable-next-line @next/next/no-img-element
+                                  <img
+                                    src={signAgUrl as string}
+                                    alt="sign ag"
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                )}
+                              </div>
+                              <div style={{ borderTop: "1px solid #e5e7eb" }} />
+                              <div style={{ color: "#374151" }}>
+                                Unterschrift AG
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Bottom text under signatures, left-aligned */}
+                          <div className="mt-2 text-left">
+                            <p
+                              className="text-[13px]"
+                              style={{ color: "#374151" }}
+                            >
+                              Sollten Sie diesen Ausweis finden, so bitten wir
+                              Sie ihn uns unfrei an obige Adresse zu senden.
+                            </p>
+                          </div>
+
+                          {/* note removed from preview */}
+
+                          <div className="flex items-center justify-center gap-4 text-[13px] mt-2">
+                            <div>Erstelldatum: {watch("createdAt")}</div>
+                            <div>Gültig bis: {watch("validTill")}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
