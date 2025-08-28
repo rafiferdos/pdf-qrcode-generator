@@ -685,16 +685,10 @@ export default function Home() {
                             {watch("maNumber")}
                           </span>
                         </div>
-                        <div className="flex gap-2">
-                          <span className="whitespace-nowrap">Barcode:</span>
-                          <span className="font-semibold">
-                            {watch("barcode")}
-                          </span>
-                        </div>
+                        {/* Barcode removed from preview (value remains in form only) */}
                       </div>
                       <div className="flex items-end justify-end">
-                        {/* Barcode image intentionally hidden in preview; keep text value only */}
-                        <div className="font-semibold">{watch("barcode")}</div>
+                        {/* Barcode removed from preview */}
                       </div>
                     </div>
 
