@@ -340,6 +340,7 @@ export default function Home() {
                             alt="photo"
                             src={photoUrl as string}
                             className="h-full w-full object-cover"
+                            style={{ transform: "translateX(6px)" }}
                           />
                         )}
                       </div>
