@@ -358,12 +358,12 @@ export default function Home() {
                   </div>
 
                   {/* Name bar */}
-                  <div
+                    <div
                     className="px-4 py-2 text-2xl font-semibold"
-                    style={{ backgroundColor: "#153e70", color: "#ffffff" }}
-                  >
+                    style={{ backgroundColor: "#1e40af", color: "#ffffff" }}
+                    >
                     {fullName}
-                  </div>
+                    </div>
 
                   {/* Quick info band */}
                   <div
