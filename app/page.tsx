@@ -386,10 +386,15 @@ export default function Home() {
                         <strong>{watch("idNumber")}</strong>
                       </div>
                     </div>
-                    <div className="flex flex-col items-center gap-2" style={{ backgroundColor: "#b6e6f2" }}>
+                    <div className="flex flex-col items-center gap-2 p-2 rounded" style={{ backgroundColor: "#b6e6f2" }}>
                       {qrDataUrl && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={qrDataUrl} alt="qr" className="h-20 w-20" />
+                        <img 
+                          src={qrDataUrl} 
+                          alt="qr" 
+                          className="h-20 w-20" 
+                          style={{ backgroundColor: "#b6e6f2", padding: "4px", borderRadius: "4px" }}
+                        />
                       )}
                     </div>
                   </div>
