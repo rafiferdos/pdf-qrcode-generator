@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Image from "next/image";
 
 import { Textarea } from "@/components/ui/textarea";
 import { toPng } from "html-to-image";
@@ -896,9 +897,11 @@ export default function Home() {
                               {photoUrl ? (
                                 <div className="space-y-4">
                                   <div className="w-32 h-32 mx-auto rounded-2xl overflow-hidden border-4 border-green-500/50 shadow-2xl">
-                                    <img
+                                    <Image
                                       src={photoUrl}
                                       alt="Profile Preview"
+                                      width={128}
+                                      height={128}
                                       className="w-full h-full object-cover"
                                     />
                                   </div>
@@ -1019,9 +1022,11 @@ export default function Home() {
                               {signAnUrl ? (
                                 <div className="space-y-3">
                                   <div className="w-20 h-12 mx-auto rounded-lg overflow-hidden border-2 border-green-500/50 shadow-lg">
-                                    <img
+                                    <Image
                                       src={signAnUrl}
                                       alt="Signature AN Preview"
+                                      width={80}
+                                      height={48}
                                       className="w-full h-full object-cover"
                                     />
                                   </div>
@@ -1070,11 +1075,11 @@ export default function Home() {
 
                           {/* Enhanced Upload Button */}
                           <button
-                            onClick={() =>
-                              document
-                                .querySelectorAll('input[accept="image/*"]')[1]
-                                ?.click()
-                            }
+                            onClick={() => {
+                              const input = document
+                                .querySelectorAll('input[accept="image/*"]')[1] as HTMLInputElement;
+                              input?.click();
+                            }}
                             className="w-full mt-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25 cursor-pointer"
                           >
                             <svg
@@ -1139,9 +1144,11 @@ export default function Home() {
                               {signAgUrl ? (
                                 <div className="space-y-3">
                                   <div className="w-20 h-12 mx-auto rounded-lg overflow-hidden border-2 border-green-500/50 shadow-lg">
-                                    <img
+                                    <Image
                                       src={signAgUrl}
                                       alt="Signature AG Preview"
+                                      width={80}
+                                      height={48}
                                       className="w-full h-full object-cover"
                                     />
                                   </div>
@@ -1190,11 +1197,11 @@ export default function Home() {
 
                           {/* Enhanced Upload Button */}
                           <button
-                            onClick={() =>
-                              document
-                                .querySelectorAll('input[accept="image/*"]')[2]
-                                ?.click()
-                            }
+                            onClick={() => {
+                              const input = document
+                                .querySelectorAll('input[accept="image/*"]')[2] as HTMLInputElement;
+                              input?.click();
+                            }}
                             className="w-full mt-4 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-emerald-500/25 cursor-pointer"
                           >
                             <svg
